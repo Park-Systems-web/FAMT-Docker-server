@@ -4,7 +4,7 @@ pipeline {
     stage('prepare') {
       steps {
         echo 'prepare'
-          git branch: "main", credentialsId: "famt-git-credential", url: 'https://github.com/Park-Systems-web/FAMT-Docker.git'
+          git branch: "main", credentialsId: "famt-git-credential", url: 'https://github.com/Park-Systems-web/FAMT-Docker-server.git'
           sh  'ls -al'
       }
     }
