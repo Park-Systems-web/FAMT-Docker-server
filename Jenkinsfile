@@ -13,8 +13,7 @@ pipeline {
         sh '''
         ls -al
         echo "JWT_SECRET=${JWT_SECRET_EXT}\nSMTP_EMAIL=${SMTP_EMAIL_EXT}\nSMTP_PASS=${SMTP_PASS_EXT}\nZOOM_API_KEY=${ZOOM_API_KEY_EXT}\nZOOM_API_SECRET=${ZOOM_API_SECRET_EXT}TZ=${TZ_EXT}" >> .env
-        echo '{"host":"ec2-18-144-161-137.us-west-1.compute.amazonaws.com","user":"root","password":"${DB_PASS_EXT}","port":"3307","database":"famt"}' >> database.json
-        echo database.json
+        echo '{"host":"ec2-18-144-161-137.us-west-1.compute.amazonaws.com","user":"root","password":\"${DB_PASS_EXT}\","port":"3307","database":"famt"}' >> database.json
         sudo docker build -f Dockerfile -t server .
         sudo docker container stop server
         sudo docker container rm server
