@@ -10,17 +10,21 @@ pipeline {
     }
     stage('server-deploy') {
       steps {
-        dir('server'){
-            sh '''
-            ls -al
-            sudo docker build -f Dockerfile -t server .
-            sudo docker container stop server
-            sudo docker container rm server
-            sudo docker run --name server -d -p 5001:5000 server
-            '''
-        }
+        sh '''
+        ls -al
+        sudo docker build -f Dockerfile -t server .
+        sudo docker container stop server
+        sudo docker container rm server
+        sudo docker run --name server -d -p 5001:5000 server
+        '''
       }
     }
-        
+    stage('cleanup') {
+      steps {
+        sh '''
+        sudo docker rmi $(sudo docker images -f "dangling=true" -q)
+        '''
+      }
+    }    
   }
 }
