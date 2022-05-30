@@ -13,7 +13,6 @@ var whitelist = [
 ];
 var corsOptions = {
   origin: function (origin, callback) {
-    console.log(origin);
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
@@ -31,11 +30,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookies());
 app.use(cors(corsOptions));
 
-app.use("/api/page/asia", require("./routes/asiaRouter"));
-app.use("/api/page/kr", require("./routes/koreaRouter"));
-app.use("/api/page/eu", require("./routes/europeRouter"));
-app.use("/api/page/us", require("./routes/usRouter"));
-app.use("/api/page/jp", require("./routes/japanRouter"));
 app.use("/api/page/common", require("./routes/commonRouter"));
 app.use("/api/users", require("./routes/usersRouter"));
 app.use("/api/admin", require("./routes/adminRouter"));

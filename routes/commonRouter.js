@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const commonCtrl = require("../controllers/commonCtrl");
-const asiaCtrl = require("../controllers/asiaCtrl");
 
 /**
  * @swagger
