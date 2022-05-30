@@ -1,3 +1,4 @@
+const { default: axios } = require("axios");
 const path = require("path");
 const { getCurrentPool } = require("../utils/getCurrentPool");
 
@@ -137,6 +138,57 @@ const commonCtrl = {
   getLanding: async (req, res) => {
     const { nation } = req.query;
     res.sendFile(path.join(__dirname, "..", `public/${nation}/landing.html`));
+  },
+
+  getBanner: async (req, res) => {
+    const { nation, path } = req.query;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `SELECT banner_path from banner WHERE path='${decodeURIComponent(
+        path
+      )}'`;
+      const row = await connection.query(sql);
+      if (row[0].length === 0) {
+        res.status(200).json({
+          success: false,
+          msg: "no banner",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          result: row[0][0].banner_path,
+        });
+      }
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+  setBanner: async (req, res) => {
+    const { nation, path, imagePath } = req.body;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `UPDATE banner SET banner_path='${imagePath}' WHERE path='${decodeURIComponent(
+        path
+      )}'`;
+      await connection.query(sql);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
   },
 };
 
