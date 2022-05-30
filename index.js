@@ -9,7 +9,7 @@ const swaggerUi = require("swagger-ui-express");
 
 var whitelist = [
   "http://localhost:8080",
-  "http://ec2-18-144-161-137.us-west-1.compute.amazonaws.com:81/",
+  "http://ec2-18-144-161-137.us-west-1.compute.amazonaws.com:81",
 ];
 var corsOptions = {
   origin: function (origin, callback) {
