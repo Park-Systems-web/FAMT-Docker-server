@@ -1,0 +1,390 @@
+<style>
+  .map-thumb {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100% !important;
+  }
+
+  .video-wrap {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    top: 50px;
+    background-color: #3c3d3b;
+  }
+
+  #sponsors-video {
+    position: relative;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+    -o-object-fit: fill;
+  }
+
+  area {
+    cursor: pointer;
+  }
+
+  .mobile-wrap {
+    display: none;
+    margin-top: 35px;
+    height: 54%;
+    overflow-y: scroll;
+  }
+
+  /* .mobile-wrap::before {
+    content: "";
+    width: 90%;
+    height: 40px;
+    position: absolute;
+    left: 0;
+    bottom: 23px;
+    background: linear-gradient(transparent, white);
+  } */
+
+  .sponsor-list {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+  }
+
+  .sponsor-item {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .sponsor-item .img-wrap {
+    width: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+  }
+
+  .sponsor-item .img-wrap .sponsor-thumb {
+    width: 100px;
+    max-height: 100%;
+  }
+
+  .desc-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 55%;
+  }
+
+  .desc-wrap .name {
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  .desc-wrap .sponsor-desc-link {
+    font-size: 11px;
+    text-decoration: underline;
+  }
+
+  .mobile-wrap::-webkit-scrollbar {
+    background-color: #013b821e;
+    border-radius: 15px;
+    width: 12px;
+    border: 1px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+  }
+
+  .mobile-wrap::-webkit-scrollbar-thumb {
+    background-color: #013c82;
+    border-radius: 15px;
+    background-clip: padding-box;
+    border: 3px solid transparent;
+  }
+
+  .sponsors-video-bg {
+    display: none;
+    position: absolute;
+    width: 100%;
+    /* top: 50px; */
+    height: 250px;
+    /* background-color: #5d5759; */
+  }
+
+  @media screen and (max-width: 1024px) {
+    .video-wrap {
+      min-height: 105vh;
+      height: auto;
+    }
+
+    #sponsors-video {
+      object-fit: contain;
+      /* height: 30%; */
+      height: 250px;
+      /* max-width: 456px; */
+      width: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      /* top: 50px; */
+    }
+
+    .sponsors-video-bg {
+      display: inline-block;
+    }
+
+    .map-thumb {
+      height: 250px !important;
+    }
+
+    .mobile-wrap {
+      display: inline-block;
+      width: 98%;
+      height: 420px;
+    }
+  }
+</style>
+<div class="video-wrap">
+  <div class="sponsors-video-bg"></div>
+  <video
+    id="sponsors-video"
+    src="https://d25unujvh7ui3r.cloudfront.net/asia/sponsor.mp4"
+    autoplay
+    loop
+    muted
+    playsinline
+  ></video>
+
+  <img
+    class="map-thumb"
+    src="https://d25unujvh7ui3r.cloudfront.net/Asia_sponsors.jpg"
+    usemap="#image-map"
+  />
+  <map name="image-map" id="image-map">
+    <area
+      class="sponsor-link-1"
+      alt="sponsor-link-1"
+      title="sponsor-link-1"
+      coords="423,326,590,458"
+      shape="rect"
+      onclick="window.open('https://parksystems.com/');"
+    />
+    <area
+      class="sponsor-link-2"
+      alt="sponsor-link-2"
+      title="sponsor-link-2"
+      coords="598,328,769,458"
+      shape="rect"
+      onclick="window.open('https://nanoscientific.org/');"
+    />
+    <area
+      class="sponsor-link-3"
+      alt="sponsor-link-3"
+      title="sponsor-link-3"
+      coords="781,332,948,460"
+      shape="rect"
+      onclick="window.open('https://www.gaiascience.com.sg/');"
+    />
+    <area
+      class="sponsor-link-4"
+      alt="sponsor-link-4"
+      title="sponsor-link-4"
+      coords="959,334,1055,458"
+      shape="rect"
+      onclick="window.open('http://www.katrinfield.com/shop/');"
+    />
+    <area
+      class="sponsor-link-5"
+      alt="sponsor-link-5"
+      title="sponsor-link-5"
+      coords="1064,334,1204,458"
+      shape="rect"
+      onclick="window.open('https://www.dutcotennant.com/');"
+    />
+    <area
+      class="sponsor-link-6"
+      alt="sponsor-link-6"
+      title="sponsor-link-6"
+      coords="1212,339,1385,456"
+      shape="rect"
+      onclick="window.open('https://vanadia.co.id/');"
+    />
+    <area
+      class="sponsor-link-7"
+      alt="sponsor-link-7"
+      title="sponsor-link-7"
+      coords="1397,338,1490,451"
+      shape="rect"
+      onclick="window.open('https://www.puditec.com/');"
+    />
+    <area
+      class="sponsor-link-8"
+      alt="sponsor-link-8"
+      title="sponsor-link-8"
+      coords="437,500,584,600"
+      shape="rect"
+      onclick="window.open('https://www.professionalsystems.pk/');"
+    />
+    <area
+      class="sponsor-link-9"
+      alt="sponsor-link-9"
+      title="sponsor-link-9"
+      coords="594,500,726,600"
+      shape="rect"
+      onclick="window.open('https://iconanalytical.com/');"
+    />
+    <area
+      class="sponsor-link-10"
+      alt="sponsor-link-10"
+      title="sponsor-link-10"
+      coords="738,500,897,600"
+      shape="rect"
+      onclick="window.open('https://www.omcbd.com/');"
+    />
+    <area
+      class="sponsor-link-11"
+      alt="sponsor-link-11"
+      title="sponsor-link-11"
+      coords="905,500,1062,600"
+      shape="rect"
+      onclick="window.open('https://www.nanotechnologyworld.org/');"
+    />
+    <area
+      class="sponsor-link-12"
+      alt="sponsor-link-12"
+      title="sponsor-link-12"
+      coords="1070,500,1226,600"
+      shape="rect"
+      onclick="window.open('https://www.scitek.com.au/');"
+    />
+    <area
+      class="sponsor-link-13"
+      alt="sponsor-link-13"
+      title="sponsor-link-13"
+      coords="1237,500,1395,600"
+      shape="rect"
+      onclick="window.open('https://www.rotak.lk/');"
+    />
+    <area
+      class="sponsor-link-14"
+      alt="sponsor-link-14"
+      title="sponsor-link-14"
+      coords="1401,500,1486,600"
+      shape="rect"
+      onclick="window.open('https://tnic.com.vn/');"
+    />
+  </map>
+
+  <section class="mobile-wrap">
+    <ul class="sponsor-list"></ul>
+  </section>
+</div>
+
+<script>
+  const $sponsorList = jQuery(".sponsor-list");
+
+  function generateMobileSponsorItem(index, name, thumb, url) {
+    let $sponsorItem = jQuery(`
+    <li class="sponsor-item sponsor-${index}">
+        <div class="img-wrap">
+          <img src="https://d25unujvh7ui3r.cloudfront.net/sponsors/${thumb}" alt="" class="sponsor-thumb"
+          onclick="window.open('${url}')">
+        </div>
+        <div class="desc-wrap">
+          <h3 class="name">${name}</h3>
+          <a href="${url}" target="_blank"
+            class="sponsor-desc-link">${url}</a>
+        </div>
+      </li>
+    `);
+
+    $sponsorItem.appendTo($sponsorList);
+  }
+
+  generateMobileSponsorItem(
+    1,
+    "Park Systems",
+    "park_logo.gif",
+    "https://parksystems.com/"
+  );
+  generateMobileSponsorItem(
+    2,
+    "NANOscientific",
+    "ns_logo.jpg",
+    "https://nanoscientific.org/"
+  );
+  generateMobileSponsorItem(
+    3,
+    "Gaia Science",
+    "gaia_logo.png",
+    "https://www.gaiascience.com.sg/"
+  );
+  generateMobileSponsorItem(
+    4,
+    "Katrin Field Inc.",
+    "kfi_logo.png",
+    "http://www.katrinfield.com/shop/"
+  );
+  generateMobileSponsorItem(
+    5,
+    "Dutco Tennant",
+    "dutco_logo.png",
+    "https://www.dutcotennant.com/"
+  );
+  generateMobileSponsorItem(
+    6,
+    "Vanadia Utama",
+    "vanadia_logo.jpg",
+    "https://vanadia.co.id/"
+  );
+  generateMobileSponsorItem(
+    7,
+    "Puditec",
+    "puditec_logo.jpg",
+    "https://www.puditec.com/"
+  );
+  generateMobileSponsorItem(
+    8,
+    "Professional Systems",
+    "professional_logo.jpg",
+    "https://www.professionalsystems.pk/"
+  );
+  generateMobileSponsorItem(
+    9,
+    "Icon Analytical",
+    "icon_analytical_logo.png",
+    "https://iconanalytical.com/"
+  );
+  generateMobileSponsorItem(
+    10,
+    "OMC",
+    "omc_logo.png",
+    "https://www.omcbd.com/"
+  );
+  generateMobileSponsorItem(
+    11,
+    "Nanotechnology World Association",
+    "nwa_logo.webp",
+    "https://www.nanotechnologyworld.org/"
+  );
+  generateMobileSponsorItem(
+    12,
+    "Scitek Australia",
+    "scitek_logo.png",
+    "https://www.scitek.com.au/"
+  );
+  generateMobileSponsorItem(
+    13,
+    "Rotak Instruments",
+    "rotak_logo.png",
+    "https://www.rotak.lk/"
+  );
+  generateMobileSponsorItem(14, "T&N", "tnn_logo.jpg", "https://tnic.com.vn/");
+</script>
+
+<script>
+  $(document).ready(function (e) {
+    $("img[usemap]").rwdImageMaps();
+  });
+</script>

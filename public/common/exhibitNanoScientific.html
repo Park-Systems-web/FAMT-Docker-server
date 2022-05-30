@@ -1,0 +1,255 @@
+<div class="magazine-wrap">
+  <img src="https://d25unujvh7ui3r.cloudfront.net/NS-magazine.jpg" class="background" usemap="#image-map">
+
+  <div class="jump-wrap" onclick="location.href='./parksystems'">
+    <i class="fas fa-arrow-left"></i><span class="jump-text">PARK SYSTEMS</span>
+  </div>
+
+  <map id="image-map" name="image-map">
+    <area class="background" target="_blank" alt="" title=""
+          href="https://www.parksystems.com/images/media/nanoscientific/Nano_Scientific_22_SUMMER-2021-WEB_final.pdf"
+          coords="1492,464,1697,731" shape="rect">
+  </map>
+</div>
+
+<style>
+  .magazine-wrap {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .magazine-wrap .background {
+    width: 100%;
+    height: 100%
+  }
+
+  .map-wrap {
+    z-index: 0;
+    cursor: pointer;
+    transition-property: left, top, width, height;
+    transition-duration: 0.2s, 0.2s, 0.2s, 0.2s;
+    transition-timing-function: ease, ease, ease, ease;
+  }
+
+  .jump-wrap {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    top: 13%;
+    left: 2%;
+    cursor: pointer;
+    padding: 15px;
+  }
+
+  .jump-wrap .jump-text {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    transition: letter-spacing 0.3s ease-in-out;
+  }
+
+  .jump-wrap:hover .jump-text {
+    letter-spacing: 2px;
+  }
+
+  .jump-wrap .fas {
+    position: relative;
+    font-size: 18px;
+    margin-right: 12px;
+    top: 1px;
+  }
+
+  /* hotspot */
+  @keyframes flickerAnimation {
+    0% {
+      opacity: 0.35;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @-o-keyframes flickerAnimation {
+    0% {
+      opacity: 0.35;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @-moz-keyframes flickerAnimation {
+    0% {
+      opacity: 0.35;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  @-webkit-keyframes flickerAnimation {
+    0% {
+      opacity: 0.35;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0.35;
+    }
+  }
+
+  .download-wrap {
+    display: inline-block;
+    position: relative;
+    left: 100%;
+    cursor: pointer;
+    color: #fff;
+    padding: 0 4px;
+    text-align: center;
+    background-color: #21ade5;
+    transition: opacity 0.3s ease-in-out;
+    transform: translate(-100%, -5%);
+    -webkit-animation: flickerAnimation 2.5s ease-in-out 0.5s infinite;
+    -moz-animation: flickerAnimation 2.5s ease-in-out 0.5s infinite;
+    -o-animation: flickerAnimation 2.5s ease-in-out 0.5s infinite;
+    animation: flickerAnimation 2.5s ease-in-out 0.5s infinite;
+  }
+
+  .download-wrap:hover,
+  .download-wrap.hover {
+    opacity: 1;
+    -webkit-animation: none;
+    -moz-animation: none;
+    -o-animation: none;
+    animation: none;
+  }
+
+  .download-wrap .fas {
+    font-size: 1.2em;
+  }
+
+  @media screen and (max-width: 768px) {
+    .magazine-wrap {
+      height: 40vh;
+    }
+
+    .download-wrap {
+      padding: 0px 5px;
+    }
+
+    .download-wrap .fas {
+      font-size: 1em;
+    }
+
+    .jump-wrap .jump-text,
+    .jump-wrap .fas {
+      font-size: 14px;
+    }
+  }
+</style>
+
+<script type="text/javascript">
+  $this = jQuery("area");
+
+  var class_name = jQuery($this).attr("class");
+  var coor = jQuery($this).attr("coords");
+  var coorA = coor.split(",");
+  var left = coorA[0];
+  var top = coorA[1];
+  var width = coorA[2] - coorA[0];
+  var height = coorA[3] - coorA[1];
+
+  var $div = jQuery(
+          `<div class="${class_name}-map-wrap map-wrap" onclick="window.open('https://nanoscientific.org/')"></div>`
+  ), $download_btn = jQuery(`
+    <div class="download-wrap"
+    onclick="window.open('https://nanoscientific.org/')">
+    <i class="fas fa-external-link-alt"></i>
+    </div>`
+  );
+
+  $div.offset({
+    left: left + "px",
+    top: top + "px",
+  });
+  $div.width(width + "px");
+  $div.height(height + "px");
+  $div.css({
+    position: "absolute"
+  });
+
+  $div.appendTo("#image-map");
+  $download_btn.appendTo(`.${class_name}-map-wrap`);
+
+  var left_coor = [];
+  var top_coor = [];
+  var width = [];
+  var height = [];
+
+  var timer = null;
+
+  jQuery(window).resize(function () {
+    clearTimeout(timer);
+
+    timer = setTimeout(function () {
+      setSize();
+    }, 200);
+  });
+
+  jQuery(".background-map-wrap").mouseover(function () {
+    jQuery(".download-wrap").addClass("hover");
+  });
+  jQuery(".background-map-wrap").mouseout(function () {
+    jQuery(".download-wrap").removeClass("hover");
+  });
+
+  function setSize() {
+    var i = 0;
+    jQuery("area").each(function () {
+      var class_name = jQuery(this).attr("class");
+      var href = jQuery(this).attr("href");
+      var txt = jQuery(this).data("name");
+      var coor = jQuery(this).attr("coords");
+      var coorA = coor.split(",");
+      left_coor[i] = coorA[0];
+      top_coor[i] = coorA[1];
+      width[i] = coorA[2] - coorA[0];
+      height[i] = coorA[3] - coorA[1];
+      i = i + 1;
+    });
+    var i = 0;
+    jQuery(".map-wrap").each(function () {
+      jQuery(this).offset({
+        left: left_coor[i],
+        top: top_coor[i],
+      });
+      jQuery(this).width(width[i] + "px");
+      jQuery(this).height(height[i] + "px");
+      i = i + 1;
+    });
+  }
+</script>
+
+<script>
+  $(document).ready(function (e) {
+    $('img[usemap="#image-map"]').rwdImageMaps();
+  });
+</script>

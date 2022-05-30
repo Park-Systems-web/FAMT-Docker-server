@@ -1,0 +1,1274 @@
+<script src="https://kit.fontawesome.com/9082949df5.js" crossorigin="anonymous"></script>
+
+</link>
+
+<!-- loading -->
+<div class="load-wrap">
+  <div class="lds-ring">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+</div>
+<!--  -->
+
+
+<div class="home-wrap">
+
+  <div class="video-wrap">
+    <video id="video-1"  src="https://d25unujvh7ui3r.cloudfront.net/asia/home_1_asia.mp4"  muted
+           ></video>
+    <video id="video-2"  src="https://d25unujvh7ui3r.cloudfront.net/asia/home_2_asia.mp4" loop muted
+           ></video>
+  </div>
+  <button class="intro-btn"><i class="fas fa-arrow-left"></i></button>
+  <section class="video-overlay flex-col">
+    <div class="vo-header flex">
+      <img class="logo" src="https://d25unujvh7ui3r.cloudfront.net/NS_logo_white.svg" alt="singh logo">
+      <div class="vo-eventdata flex-col">
+        <span class="vo-title white">NanoScientific Symposium 2021 ASIA<br />
+        </span>
+        <div class="vo-info-visit flex">
+          <div class="vo-date-place flex-col">
+            <span class="vo-date white">
+              <span class="bg-white">Date:</span>&nbsp;&nbsp;2021 October 28
+            </span>
+            <span class="vo-place white">
+              <span class="bg-white">Place:</span>&nbsp;&nbsp;cleantech one in Singapore - Hybrid Event</span>
+            </span>
+          </div>
+          <div class="visit-wrap">
+            <button class="btn-visit">
+              <img class="visit-img" src="https://d25unujvh7ui3r.cloudfront.net/visit now_skyblue.svg">
+            </button>
+            <button class="btn-visit-m">
+              <img class="visit-img" src="https://d25unujvh7ui3r.cloudfront.net/visit now_skyblue.svg">
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="vo-footer">
+      <span class="footer-desc white">
+        &nbsp;Join us for the 2021 NanoScientific Symposium Asia — A Hybrid Event<br><br>
+        We are pleased to announce an innovative format for the 2021 NanoScientific Symposium Asia, which includes both
+        virtual and in-person lecture and discussion talks.<br>The event will showcase advanced Nano Technology
+        applications that are rapidly changing and improving our world.
+      </span>
+    </div>
+  </section>
+  <div class="skip-btn-wrap">
+    <button class="skip-btn">Skip</button>
+  </div>
+  <div class="btns-wrap">
+    <img src="https://d25unujvh7ui3r.cloudfront.net/asia/home_1_thumb.jpg" class="home-thumb home-1-m" />
+    <img src="https://d25unujvh7ui3r.cloudfront.net/asia/home_2_thumb.jpg" class="home-thumb home-2-m"
+         usemap="#image-map" />
+
+    <map name="image-map" id="image-map">
+      <area target="" alt="play" title="play" class="play" href="#" coords="748,275,1189,498" shape="rect"
+            onmouseover="areaHover(this)" onmouseout="areaLeave(this)" onclick="play_click()" />
+      <area target="" alt="program" title="Program" class="program" href="/program" coords="240,541,514,715"
+            shape="rect" onmouseover="areaHover(this);" onmouseout="areaLeave(this);" />
+      <area target="" alt="lecture hall" title="Lecture Hall" class="lecture" href="/lecture-hall"
+            coords="738,500,1197,720" shape="rect" onmouseover="areaHover(this);" onmouseout="areaLeave(this);" />
+      <area target="" alt="exhibit hall" title="Exhibit Hall" class="exhibit" href="/exhibit-hall"
+            coords="1395,541,1667,714" shape="rect" onmouseover="areaHover(this);" onmouseout="areaLeave(this);" />
+    </map>
+    <!-- mobile -->
+    <section class="mobile-btns-wrap mobile">
+      <div class="play-btn-m" onclick="play_click()">
+        <!-- <div class="play-btn-m"> -->
+        <button class="play-btn">
+          <i class="play-icon fab fa-youtube" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="program-btn-m" onclick="location.href='/program'"></div>
+      <div class="lecture-btn-m" onclick="location.href='/lecture-hall'"></div>
+      <div class="exhibit-btn-m" onclick="location.href='/exihibit-hall/park-systems'"></div>
+    </section>
+  </div>
+
+  <div class="modal-overlay"></div>
+  <div class="video-modal-wrap">
+    <iframe data-src="https://www.youtube.com/embed/o_0noa9fSrY" title="YouTube video player" frameborder="0"
+            allow="muted; accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+    <button class="button-exit">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>
+<style>
+  * {
+    font-family: "Open Sans", sans-serif;
+  }
+
+  body,
+  p {
+    margin: 0;
+    overflow: hidden;
+  }
+
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+
+  button {
+    border-style: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .home-wrap {
+    position: relative;
+    height: 100vh;
+  }
+
+  .video-wrap {
+    height: 100%;
+  }
+
+  .home-1-thumb {
+    position: absolute;
+    top: -6%;
+    width: 100%;
+    height: 110%;
+    -o-object-fit: fill;
+    object-fit: fill;
+  }
+
+  #video-1 {
+    visibility: visible;
+    position: absolute;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: fill;
+    object-fit: fill;
+    opacity: 1;
+  }
+
+  #video-2 {
+    visibility: hidden;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    width: 100%;
+    height: 100%;
+    -o-object-fit: fill;
+    object-fit: fill;
+  }
+
+  .video-wrap.active #video-1 {
+    visibility: hidden;
+  }
+
+  .video-wrap.active #video-2 {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .intro-btn {
+    /* 인트로 버튼 */
+    display: none;
+    position: absolute;
+    top: 75px;
+    left: 20px;
+    padding: 0px;
+    font-size: 22px;
+    color: white;
+    transition: all 0.2s ease-in-out;
+    z-index: 10;
+  }
+
+  .intro-btn:hover {
+    color: #21ade5;
+  }
+
+  .home-wrap.visit .intro-btn,
+  .home-wrap.hide .intro-btn {
+    display: inline-block;
+  }
+
+  /* video-overlay */
+  .video-overlay {
+    position: absolute;
+    transform: translateY(-100%);
+    width: 100%;
+    height: 333px;
+    top: 100%;
+    background-color: #000000bd;
+    opacity: 1;
+    border-top: 0.3em;
+    border-bottom: 0.3em;
+    border-color: #fff;
+    border-style: solid;
+    justify-content: space-evenly;
+    padding: 0 15px;
+  }
+
+  .vo-header {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .vo-header .logo {
+    width: 140px;
+    margin-right: 2%;
+  }
+
+  .vo-eventdata {
+    font-size: 23px;
+    font-weight: 700;
+    height: 70%;
+    justify-content: space-between;
+  }
+
+  .vo-title {
+    line-height: 120%;
+  }
+
+  .vo-date-place {
+    margin-right: 20px;
+    line-height: 130%;
+  }
+
+  .vo-date-place-wrap {
+    display: flex;
+  }
+
+  .vo-date-place-title {
+    margin-right: 8px;
+  }
+
+  .vo-footer {
+    display: flex;
+    justify-content: center;
+  }
+
+  .footer-desc {
+    width: 70%;
+    height: 70px;
+    overflow-y: scroll;
+    text-align: center;
+    line-height: 120%;
+  }
+
+  .footer-desc::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .footer-desc::-webkit-scrollbar-thumb {
+    background-color: #727272;
+    border-radius: 3px;
+  }
+
+  .btn-visit,
+  .btn-visit-m {
+    opacity: 0.65;
+    transition: opacity 0.3s ease;
+  }
+
+  .visit-img {
+    width: 300px;
+  }
+
+  .btn-visit:hover,
+  .btn-visit-m:hover {
+    opacity: 1;
+  }
+
+  .white {
+    color: white;
+  }
+
+  .bg-white {
+    background-color: #fff;
+    color: black
+  }
+
+  .bg-white.half {
+    height: 50%;
+  }
+
+  .flex {
+    display: flex;
+  }
+
+  .flex-col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* hide */
+  .home-wrap.hide .logo-wrap,
+  .home-wrap.hide .video-overlay,
+  .home-wrap.hide .text-wrap {
+    visibility: hidden;
+    opacity: 0;
+    /* transition: opacity 0.5s ease, visibility 0.1s ease 0.5s; */
+  }
+
+  .home-wrap.hide .home-1-thumb {
+    display: none
+  }
+
+  /* skip btn */
+  .skip-btn-wrap {
+    visibility: hidden;
+    opacity: 0;
+
+    position: absolute;
+    top: 90%;
+    left: 93%;
+    transform: translate(-50%, -50%);
+    background-color: #1f94d4;
+    padding: 8px 20px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 17px;
+    border-radius: 3px;
+
+    /* transition: opacity 1s ease,
+      visibility 0s ease 1s; */
+  }
+
+  .skip-btn-wrap.active {
+    opacity: 0.6;
+    visibility: visible;
+    /* transition: opacity 1s ease,
+      visibility 0s ease; */
+  }
+
+  .skip-btn {
+    color: #fff;
+    font-size: 28px;
+  }
+
+
+  /* buttons after video */
+  #image-map area {
+    z-index: 10;
+  }
+
+  .btns-wrap {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .home-thumb {
+    position: relative;
+    width: 100%;
+    height: 100% !important;
+    opacity: 0;
+    object-fit: fill;
+  }
+
+  .btns-wrap.active {
+    visibility: visible;
+  }
+
+  /* style of each buttons */
+  .play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #000;
+    opacity: 0.5;
+    transition: color 0.3s ease, opacity 0.3s ease;
+  }
+
+  .play-btn:hover {
+    color: #ff0000;
+    opacity: 1;
+  }
+
+  .btns-wrap.active .play-map-wrap .play-btn {
+    visibility: visible;
+  }
+
+  .play-icon {
+    font-size: 2.2vw;
+  }
+
+  .program-title,
+  .lecture-title,
+  .exhibit-title {
+    width: 91px;
+    opacity: 0.45;
+    transform: translate(-50%, -50%);
+    /* transition: all 0.5s ease-in-out; */
+  }
+
+  .program-title {
+    top: 36%;
+    left: 50%;
+  }
+
+  .lecture-title {
+    top: 36%;
+    left: 50%;
+  }
+
+  .exhibit-title {
+    top: 35%;
+    left: 45%;
+  }
+
+
+  /* button hover */
+  .map-title {
+    position: absolute;
+  }
+
+  .map-wrap {
+    position: absolute;
+    z-index: 0;
+    cursor: pointer;
+    transition-property: left, top, width, height;
+    transition-duration: 0.2s, 0.2s, 0.2s, 0.2s;
+    transition-timing-function: ease, ease, ease, ease;
+  }
+
+  .play-map-wrap:hover .play-btn {
+    color: #ff0000;
+    opacity: 1;
+  }
+
+  .play-map-title {
+    display: none;
+  }
+
+  .btns-wrap.active .program-title,
+  .btns-wrap.active .lecture-title,
+  .btns-wrap.active .exhibit-title {
+    visibility: visible;
+    position: absolute;
+    font-size: 0.95vw;
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 2px 2px 4px #979797;
+  }
+
+  .program-title:hover,
+  .lecture-title:hover,
+  .exhibit-title:hover {
+    color: #000;
+    opacity: 1;
+  }
+
+  .map-wrap:hover .animated-arrow-wrap {
+    visibility: visible;
+  }
+
+  .load-wrap {
+    display: none;
+  }
+
+  .load-wrap img {
+    filter: none;
+  }
+
+  /* arrow */
+  .animated-arrow-wrap {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    transform: rotateX(60deg);
+    visibility: hidden;
+  }
+
+  .animated-arrow-wrap.center {
+    top: 80%;
+    left: 50%;
+    transform: translateX(-52%) rotateX(60deg);
+  }
+
+  .animated-arrow-wrap.left {
+    top: 65%;
+    left: 44%;
+  }
+
+  .animated-arrow-wrap.right {
+    top: 65%;
+    left: 43%;
+  }
+
+  .fa-chevron-up {
+    color: #013c82;
+  }
+
+  .animated-arrow-wrap.center .fa-chevron-up {
+    font-size: 50px;
+    margin: -15px 0;
+  }
+
+  .animated-arrow-wrap.left .fa-chevron-up {
+    font-size: 50px;
+    margin: -15px 0;
+  }
+
+  .animated-arrow-wrap.right .fa-chevron-up {
+    font-size: 50px;
+    margin: -15px 0;
+  }
+
+  .arrow-1 {
+    position: relative;
+    animation: arrowAnimation1 2s ease-in-out 0.5s infinite;
+    opacity: 0.2;
+  }
+
+  .arrow-2 {
+    position: relative;
+
+    opacity: 0.5;
+    animation: arrowAnimation2 2s ease-in-out 0.5s infinite;
+  }
+
+  .arrow-3 {
+    position: relative;
+    opacity: 1;
+    animation: arrowAnimation3 2s ease-in-out 0.5s infinite;
+  }
+
+  .animated-arrow-wrap.left .arrow-1 {
+    transform: rotate3D(1, 0, 1, 45deg);
+  }
+
+  .animated-arrow-wrap.left .arrow-2 {
+    transform: rotate3D(1, 0, 1, 45deg) translateX(-27%);
+  }
+
+  .animated-arrow-wrap.left .arrow-3 {
+    transform: rotate3D(1, 0, 1, 45deg) translateX(-55%);
+  }
+
+  .animated-arrow-wrap.right .arrow-1 {
+    transform: rotate3D(1, 0, -1, 45deg);
+  }
+
+  .animated-arrow-wrap.right .arrow-2 {
+    transform: rotate3D(1, 0, -1, 45deg) translateX(27%);
+  }
+
+  .animated-arrow-wrap.right .arrow-3 {
+    transform: rotate3D(1, 0, -1, 45deg) translateX(55%);
+  }
+
+  @keyframes arrowAnimation1 {
+    0% {
+      opacity: 0.2;
+    }
+
+    25% {
+      opacity: 0.5;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    75% {
+      opacity: 0.5;
+    }
+
+    100% {
+      opacity: 0.2;
+    }
+  }
+
+  @keyframes arrowAnimation2 {
+    0% {
+      opacity: 0.5;
+    }
+
+    25% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.2;
+    }
+
+    75% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes arrowAnimation3 {
+    0% {
+      opacity: 1;
+    }
+
+    25% {
+      opacity: 0.2;
+    }
+
+    50% {
+      opacity: 0.5;
+    }
+
+    75% {
+      opacity: 0.2;
+    }
+
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* video modal */
+  .video-modal-wrap {
+    visibility: hidden;
+    opacity: 0;
+
+    position: fixed;
+    width: 70%;
+    height: 0%;
+    top: calc(50% + 40px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    box-shadow: 3px 3px 9px #00000073;
+
+    transition: height 0.5s ease-in-out,
+    visibility 0s ease-in-out 0.5s,
+    opacity 0.5s ease-in-out;
+  }
+
+  .video-modal-wrap.active {
+    height: 70%;
+    opacity: 1;
+    visibility: visible;
+    transition: height 0.5s ease-in-out,
+    visibility 0s ease-in-out,
+    opacity 0.5s ease-in-out;
+  }
+
+  .video-modal-wrap iframe {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
+  .button-exit {
+    position: absolute;
+    display: inline-block;
+    left: 100%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 0px 8px;
+    border: 2px solid black;
+    border-radius: 50%;
+    opacity: .65;
+    transition: opacity .3s ease-in-out;
+  }
+
+  .button-exit:hover {
+    opacity: 1;
+  }
+
+  .modal-overlay {
+    visibility: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+
+    background-color: #000;
+    transition: opacity 0.3s ease-in-out,
+    visibility 0s ease-in-out 0.3s;
+  }
+
+  .modal-overlay.active {
+    visibility: visible;
+    opacity: 0.6;
+    transition: opacity 0.3s ease-in-out,
+    visibility 0s ease-in-out;
+  }
+
+  /* mobile web */
+  .visit-wrap {
+    display: flex;
+    align-items: center;
+  }
+
+  .btn-visit-m {
+    visibility: hidden;
+    display: none;
+  }
+
+  .home-2-m {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .mobile {
+    visibility: hidden;
+  }
+
+  .mobile-btns-wrap {
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .play-btn-m,
+  .program-btn-m,
+  .lecture-btn-m,
+  .exhibit-btn-m {
+    /* background-color: #ffffff8e; */
+    position: absolute;
+    cursor: pointer;
+  }
+
+  .play-btn-m {
+    width: 24%;
+    height: 20%;
+    min-width: 132px;
+    min-height: 60px;
+    top: 36%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .play-btn-m:hover .play-btn {
+    color: #FF0000;
+    opacity: 1;
+  }
+
+  .program-btn-m {
+    width: 33%;
+    height: 18%;
+    /* min-width: 94px; */
+    /* min-height: 58px; */
+    top: 59%;
+    left: -42px;
+    transform: translate(0%, -50%);
+  }
+
+  .lecture-btn-m {
+    width: 23.7%;
+    height: 22%;
+    min-width: 132px;
+    min-height: 60px;
+    top: 57%;
+    left: 50.4%;
+    transform: translate(-50%, -50%);
+  }
+
+  .exhibit-btn-m {
+    width: 33%;
+    height: 18%;
+    /* min-width: 94px; */
+    /* min-height: 58px; */
+    top: 59%;
+    left: 48px;
+    transform: translate(200%, -50%);
+  }
+
+  .play-btn-m .play-icon {
+    font-size: 27px
+  }
+
+  @media screen and (max-width: 768px) {
+    .mobile {
+      visibility: visible;
+    }
+
+    .video-overlay {
+      z-index: 1;
+    }
+
+    .home-wrap::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -5%;
+      width: 110%;
+      height: 100%;
+      background: url("https://d25unujvh7ui3r.cloudfront.net/asia/home_1_thumb.jpg");
+      filter: blur(23px);
+    }
+
+    #image-map {
+      display: none;
+    }
+
+    .home-wrap.visit::before {
+      background: url("https://d25unujvh7ui3r.cloudfront.net/asia/home_2_thumb.jpg");
+    }
+
+    .home-thumb {
+      object-fit: cover;
+      -o-object-fit: cover;
+    }
+
+    .logo-wrap {
+      display: inline-block;
+      position: absolute;
+      left: 28%;
+      top: 77%;
+      width: 17%;
+      min-width: 65px;
+      max-width: 77px;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+    }
+
+    .btn-visit-m {
+      visibility: visible;
+      display: inline-block;
+    }
+
+    .btns-wrap {
+      visibility: visible;
+      position: absolute;
+      width: 100%;
+      height: 50vw;
+      min-height: 320px;
+      -o-object-fit: cover;
+      object-fit: cover;
+      opacity: 1;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+
+    .btn-visit,
+    .video-wrap {
+      display: none;
+    }
+
+    .video-modal-wrap.active {
+      height: 30%;
+      top: 50%;
+      width: 96%;
+    }
+
+    /* home-1 */
+    .home-1-m {
+      opacity: 1;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .mobile-btns-wrap,
+    .home-2-m {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease-in-out;
+      transition-delay: 1s;
+    }
+
+    .map-wrap {
+      visibility: hidden;
+      transition: visibility 0.5s ease-in-out;
+      transition-delay: 1s;
+    }
+
+    .video-overlay {
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    /* home-2 */
+    .home-wrap.visit .home-1-m {
+      opacity: 0;
+    }
+
+    .home-wrap.visit .mobile-btns-wrap,
+    .home-wrap.visit .home-2-m {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .home-wrap.visit .video-overlay,
+    .home-wrap.visit .btn-visit-m {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+
+    .home-wrap.visit .map-wrap {
+      visibility: visible;
+    }
+
+    /* overlay */
+    .video-overlay {
+      height: 233px;
+    }
+
+    .vo-header .logo {
+      width: 77px;
+    }
+
+    .visit-img {
+      width: 160px;
+    }
+
+    .vo-eventdata {
+      font-size: 14px;
+      height: 90%;
+    }
+
+    .footer-desc {
+      height: 50px;
+      width: 90%;
+      font-size: 10px;
+    }
+
+  }
+
+  /* temp */
+  /* .play {
+    cursor: default;
+  }
+
+  .play-map-wrap {
+    display: none;
+  }
+
+  .play-btn-m {
+    display: none;
+  } */
+</style>
+
+<script >
+  var $ctrlVideo_1 = document.querySelector("#video-1"),
+          $ctrlVideo_2 = document.querySelector("#video-2"),
+          $btn_visit = document.querySelector(".btn-visit"),
+          $btn_skip = document.querySelector(".skip-btn"),
+          $play_btn = null,
+          $modal_close = document.querySelector(".button-exit"),
+          $iframe = document.querySelector(".video-modal-wrap iframe"),
+          $homeWrap = document.querySelector(".home-wrap"),
+          $videoWrap = document.querySelector(".video-wrap"),
+          left_coor_a = [],
+          top_coor_a = [],
+          width_a = [],
+          height_a = [];
+
+  /**
+   * lazy loading
+   */
+  document.addEventListener("DOMContentLoaded", function () {
+    var lazyVideos = [].slice.call(document.querySelectorAll("video.lazy"));
+
+    lazyVideos.forEach(function (video) {
+      for (var i = 0; i < video.children.length; i++) {
+        var source = video.children[i].getAttribute("data-src")
+        video.children[i].src = source;
+      }
+      video.load();
+      video.classList.remove("lazy");
+    })
+  });
+
+  function enableSpinner() {
+    jQuery(".load-wrap").css("display", "inline-block");
+  }
+  function disableSpinner() {
+    jQuery(".load-wrap").css("display", "none");
+    $ctrlVideo_1.play();
+  }
+
+  $btn_visit.addEventListener("click", (event) => {
+    if ($ctrlVideo_1.readyState === 4) {
+
+    }
+    else {
+      enableSpinner();
+      var imageLoaded = 0;
+      var total_cnt = jQuery("video").length;
+      jQuery("video").each(function () {
+        jQuery(this)[0].oncanplaythrough = function () {
+          imageLoaded++;
+          if (imageLoaded === total_cnt && jQuery(this)[0].networkState === 1) {
+            disableSpinner();
+          }
+        }
+      });
+    }
+    $ctrlVideo_1.play();
+    document.querySelector(".home-wrap").classList.add("hide");
+    document.querySelector(".skip-btn-wrap").classList.add("active");
+    $homeWrap.classList.add("visit");
+  });
+
+  function areaHover(element) {
+    var name = element.className;
+    var btn_name = name.concat("", "-map-wrap");
+    document.querySelector(`.${btn_name}`).classList.add("hover");
+  }
+  function areaLeave(element) {
+    var name = element.className;
+    var btn_name = name.concat("", "-map-wrap");
+    document.querySelector(`.${btn_name}`).classList.remove("hover");
+  }
+
+  /**
+   * map
+   */
+  function setCoords() {
+    var i = 0;
+    jQuery("area").each(function () {
+      var class_name = jQuery(this).attr("class");
+      var href = jQuery(this).attr("href");
+      var txt = jQuery(this).data("name");
+      var coor = jQuery(this).attr("coords");
+      var coorA = coor.split(",");
+      left_coor_a[i] = coorA[0];
+      top_coor_a[i] = coorA[1];
+      width_a[i] = coorA[2] - coorA[0];
+      height_a[i] = coorA[3] - coorA[1];
+      i = i + 1;
+    });
+    var i = 0;
+    jQuery(".map-wrap").each(function () {
+      jQuery(this).offset({
+        left: left_coor_a[i],
+        top: top_coor_a[i],
+      });
+      jQuery(this).width(width_a[i] + "px");
+      jQuery(this).height(height_a[i] + "px");
+      i = i + 1;
+    });
+  }
+
+  function registerEvents() {
+    $btn_skip.addEventListener("click", (event) => {
+      document.querySelector(".video-wrap").classList.add("active");
+      document.querySelector(".skip-btn-wrap").classList.remove("active");
+      $ctrlVideo_1.currentTime = $ctrlVideo_1.duration;
+    });
+
+    $ctrlVideo_1.addEventListener("ended", (event) => {
+      document.querySelector(".video-wrap").classList.add("active");
+      $ctrlVideo_2.play();
+      document.querySelector(".btns-wrap").classList.add("active");
+      document.querySelector(".skip-btn-wrap").classList.remove("active");
+      if (getCookie("nss-home-visited") === undefined) {
+        document.cookie = "nss-home-visited=true";
+      }
+    });
+
+    let $introBtn = document.querySelector(".intro-btn");
+    $introBtn.addEventListener("click", () => {
+      deleteCookie("nss-home-visited");
+      setTimeout(function () {
+        window.location.reload();
+      }, 500);
+    })
+
+    // modal
+    var $play_div = document.querySelector(".play-map-wrap");
+    var $modal_wrap = document.querySelector(".video-modal-wrap");
+    var $modal_overlay = document.querySelector(".modal-overlay");
+
+    // open modal
+    $play_btn.addEventListener("click", play_click);
+    $play_div.addEventListener("click", play_click);
+
+    // close modal
+    $modal_close.addEventListener("click", function () {
+      $modal_wrap.classList.remove("active");
+      $modal_overlay.classList.remove("active");
+      setTimeout(youtube_off, 500);
+    });
+    $modal_overlay.addEventListener("click", function () {
+      $modal_wrap.classList.remove("active");
+      $modal_overlay.classList.remove("active");
+      setTimeout(youtube_off, 500);
+    });
+
+    // mobile visit button
+    var $visit_m = document.querySelector(".btn-visit-m");
+    var $home_wrap = document.querySelector(".home-wrap");
+    $visit_m.addEventListener("click", function () {
+      $home_wrap.classList.add("visit");
+      if (getCookie("nss-home-visited") === undefined) {
+        document.cookie = "nss-home-visited=true";
+      }
+    })
+  }
+
+  function play_click() {
+    const play_deact = false;
+
+    var $modal_wrap = document.querySelector(".video-modal-wrap");
+    var $modal_overlay = document.querySelector(".modal-overlay");
+
+    if (play_deact) {
+      alert("coming soon");
+    }
+    else {
+      $modal_wrap.classList.add("active");
+      $modal_overlay.classList.add("active");
+      setTimeout(youtube_on, 500);
+    }
+
+  }
+  function youtube_on() {
+    $iframe.src = $iframe.getAttribute("data-src");
+  }
+  function youtube_off() {
+    $iframe.src = "";
+  }
+
+  function init() {
+    if (checkVisited()) {
+      $homeWrap.classList.add("hide");
+      $homeWrap.classList.add("visit");
+      $videoWrap.classList.add("active");
+    }
+    jQuery("area").each(function () {
+      var class_name = jQuery(this).attr("class");
+      var href = jQuery(this).attr("href");
+      var $a = jQuery(`<a class=${class_name}-title href=${href}></a>`);
+      var $div = jQuery(
+              `<div class="${class_name}-map-wrap map-wrap"></div>`
+      );
+      var $arrowL = jQuery(`
+      <div class="animated-arrow-wrap left">
+        <i class="fas fa-chevron-up arrow-1"></i>
+        <i class="fas fa-chevron-up arrow-2"></i>
+        <i class="fas fa-chevron-up arrow-3"></i>
+      </div>
+      `)
+      var $arrowC = jQuery(`
+      <div class="animated-arrow-wrap center">
+        <i class="fas fa-chevron-up arrow-1"></i>
+        <i class="fas fa-chevron-up arrow-2"></i>
+        <i class="fas fa-chevron-up arrow-3"></i>
+      </div>
+      `)
+      var $arrowR = jQuery(`
+      <div class="animated-arrow-wrap right">
+        <i class="fas fa-chevron-up arrow-1"></i>
+        <i class="fas fa-chevron-up arrow-2"></i>
+        <i class="fas fa-chevron-up arrow-3"></i>
+      </div>
+      `)
+
+      $div.appendTo("#image-map");
+
+      if (class_name !== "play") {
+        $a.appendTo(`.${class_name}-map-wrap`);
+        if (class_name === "program") {
+          $arrowL.appendTo(`.${class_name}-map-wrap`);
+          jQuery(`.${class_name}-map-wrap`).attr("onclick", "location.href='/asia/program'")
+        }
+        else if (class_name === "lecture") {
+          $arrowC.appendTo(`.${class_name}-map-wrap`);
+          jQuery(`.${class_name}-map-wrap`).attr("onclick", "location.href='/asia/lecture-hall'")
+        }
+        else if (class_name === "exhibit") {
+          $arrowR.appendTo(`.${class_name}-map-wrap`);
+          jQuery(`.${class_name}-map-wrap`).attr("onclick", "location.href='/asia/exhibit/parksystems'")
+        }
+      }
+    });
+
+    var $play_btn_tmp = jQuery(
+            `<button class="play-btn"><i class="play-icon fab fa-youtube"></i></button>`
+    );
+    $play_btn_tmp.appendTo(".play-map-wrap");
+    $play_btn = document.querySelector(".play-btn");
+
+    registerEvents();
+
+    // after page fully loaded, coordinates are calculated
+      if (checkVisited()) {
+        $ctrlVideo_2.play();
+        setTimeout(()=>{
+        document.querySelector(".btns-wrap").classList.add("active");
+
+        },500)
+      }
+      delayed_sizing();
+  }
+
+  function delayed_sizing() {
+    // vars
+    left_coor_a = [];
+    top_coor_a = [];
+    width_a = [];
+    height_a = [];
+    // once before resized, set the coordinate
+    setCoords();
+
+    var timer = null;
+
+    jQuery(window).resize(function () {
+      clearTimeout(timer);
+
+      timer = setTimeout(function () {
+        setCoords();
+      }, 200);
+    });
+  }
+
+  // cookie functions
+  // 주어진 이름의 쿠키를 반환하는데,
+  // 조건에 맞는 쿠키가 없다면 undefined를 반환합니다.
+  function getCookie(name) {
+    let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+    ));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+  }
+  function setCookie(name, value, options = {}) {
+    options = {
+      path: '/',
+      // 필요한 경우, 옵션 기본값을 설정할 수도 있습니다.
+      ...options
+    };
+    if (options.expires instanceof Date) {
+      options.expires = options.expires.toUTCString();
+    }
+    let updatedCookie = encodeURIComponent(name) + "=" + encodeURIComponent(value);
+    for (let optionKey in options) {
+      updatedCookie += "; " + optionKey;
+      let optionValue = options[optionKey];
+      if (optionValue !== true) {
+        updatedCookie += "=" + optionValue;
+      }
+    }
+    document.cookie = updatedCookie;
+  }
+  function deleteCookie(name) {
+    setCookie(name, "", {
+      'max-age': -1
+    })
+  }
+  // 방문 여부 체크 후 홈 띄워주기
+  function checkVisited() {
+    return getCookie("nss-home-visited");
+  }
+
+
+  init();
+
+</script>
+
+<script>
+  $(document).ready(function(e) {
+    $('img[usemap]').rwdImageMaps();
+  });
+</script>
