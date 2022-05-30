@@ -31,13 +31,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookies());
 app.use(cors(corsOptions));
 
-// if(process.env.NODE_ENV === 'production'){
-//     app.use(express.static('client/build'))
-//     app.get('*',(req,res)=>{
-//         res.sendFile(path.join(__dirname,'client','build','index.html'))
-//     })
-// }
-
 app.use("/api/page/asia", require("./routes/asiaRouter"));
 app.use("/api/page/kr", require("./routes/koreaRouter"));
 app.use("/api/page/eu", require("./routes/europeRouter"));
