@@ -12,6 +12,7 @@ var whitelist = [
   "http://ec2-18-144-161-137.us-west-1.compute.amazonaws.com:81",
   "http://famt.parksystems.com",
   "https://famt.parksystems.com",
+  "famt.parksystems.com",
 ];
 var corsOptions = {
   origin: function (origin, callback) {
