@@ -49,8 +49,6 @@ const usersCtrl = {
           httpOnly: true,
         });
 
-        console.log(res.cookie);
-
         res.status(200).json({
           success: true,
           message: "login success",

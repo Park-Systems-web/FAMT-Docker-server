@@ -29,6 +29,7 @@ module.exports = {
         let newAccessToken = issueAccessToken(refreshToken.email);
         // 다음 미들웨어에서 접근하기 위한 전역 변수로 지정
         res.locals.accessToken = newAccessToken;
+
         next();
       }
     } else {
@@ -38,6 +39,7 @@ module.exports = {
         res.cookie("refreshToken", newRefreshToken, {
           httpOnly: true,
         });
+        res.locals.accessToken = req.body.accessToken;
         next();
       } else {
         // case 4: 둘다 존재한다면, refresh token을 db와 비교.
@@ -78,6 +80,7 @@ module.exports = {
       next();
     } catch (err) {
       connection.release();
+      console.log(err);
       res.status(500).json({
         success: false,
         code: "S0",

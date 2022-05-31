@@ -242,4 +242,7 @@ router.route("/speakers/keynote").get(commonCtrl.getKeynoteSpeakers);
 router.route("/speakers/detail").get(commonCtrl.getSpeakerDetailById);
 router.route("/banner").get(commonCtrl.getBanner).post(commonCtrl.setBanner);
 
+router.route("/landing/:id").get(commonCtrl.getLandingContent);
+router.route("/landing/2").post(commonCtrl.setLanding2Content);
+
 module.exports = router;

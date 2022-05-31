@@ -190,6 +190,57 @@ const commonCtrl = {
       connection.release();
     }
   },
+  getLandingContent: async (req, res) => {
+    const { nation } = req.query;
+    const { id } = req.params;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `SELECT * from landing_section_${id}`;
+      const row = await connection.query(sql);
+      if (row[0].length === 0) {
+        res.status(200).json({
+          success: false,
+          msg: "no content",
+        });
+      } else {
+        res.status(200).json({
+          success: true,
+          result: row[0][0],
+        });
+      }
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+
+  setLanding2Content: async (req, res) => {
+    const { nation, title, description } = req.body;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `UPDATE landing_section_2 SET 
+      title='${title}',
+      description='${description}'
+      WHERE id=1`;
+      await connection.query(sql);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
 };
 
 module.exports = commonCtrl;
