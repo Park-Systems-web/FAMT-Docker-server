@@ -3,25 +3,6 @@ const commonCtrl = require("../controllers/commonCtrl");
 
 /**
  * @swagger
- *  /api/page/common/eventLanding:
- *    get:
- *      tags:
- *      - Common
- *      description: 가장 처음 이벤트 랜딩 페이지를 가져옵니다.
- *      parameters:
- *        - name: nation
- *          in: query
- *          schema:
- *            type: string
- *      responses:
- *        '200':
- *          description: successful operation
- */
-
-router.route("/eventLanding").get(commonCtrl.getEventLanding);
-
-/**
- * @swagger
  *  /api/page/common/exhibit/parksystems:
  *    get:
  *      tags:
@@ -60,25 +41,6 @@ router.route("/exhibit/nanoscientific").get(commonCtrl.getNanoScientific);
 
 /**
  * @swagger
- *  /api/page/common/maintenance:
- *    get:
- *      tags:
- *      - Common
- *      description: 사이트 수리중이라는 문구를 받는 HTML 입니다.
- *      parameters:
- *        - name: nation
- *          in: query
- *          schema:
- *            type: string
- *      responses:
- *        '200':
- *          description: successful operation
- */
-
-router.route("/maintenance").get(commonCtrl.getMaintenance);
-
-/**
- * @swagger
  *  /api/page/common/landing:
  *    get:
  *      tags:
@@ -96,26 +58,6 @@ router.route("/maintenance").get(commonCtrl.getMaintenance);
  */
 
 router.route("/landing").get(commonCtrl.getLanding);
-
-/**
- * @swagger
- *  /api/page/common/sponsors:
- *    get:
- *      tags:
- *      - Common
- *      description: 각 국가의 sponsor page html 을 줍니다. 국가는 쿼리에 담습니다
- *      parameters:
- *        - name: nation
- *          in: query
- *          required: true
- *          schema:
- *            type: string
- *      responses:
- *        '200':
- *          description: successful operation
- */
-
-router.route("/sponsors").get(commonCtrl.getSponsors);
 
 /**
  * @swagger
@@ -244,5 +186,12 @@ router.route("/banner").get(commonCtrl.getBanner).post(commonCtrl.setBanner);
 
 router.route("/landing/:id").get(commonCtrl.getLandingContent);
 router.route("/landing/2").post(commonCtrl.setLanding2Content);
+
+router
+  .route("/sponsor")
+  .get(commonCtrl.getSponsor)
+  .post(commonCtrl.addSponsor)
+  .put(commonCtrl.modifySponsor)
+  .delete(commonCtrl.deleteSponsor);
 
 module.exports = router;

@@ -3,10 +3,6 @@ const path = require("path");
 const { getCurrentPool } = require("../utils/getCurrentPool");
 
 const commonCtrl = {
-  getEventLanding: async (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "public/common/landing.html"));
-  },
-
   getExhibitParkSystems: async (req, res) => {
     res.sendFile(
       path.join(__dirname, "..", "public/common/exhibitParkSystems.html")
@@ -17,9 +13,6 @@ const commonCtrl = {
     res.sendFile(
       path.join(__dirname, "..", "public/common/exhibitNanoScientific.html")
     );
-  },
-  getMaintenance: async (req, res) => {
-    res.sendFile(path.join(__dirname, "..", "public/common/maintenance.html"));
   },
   getPrograms: async (req, res) => {
     const { nation } = req.query;
@@ -130,10 +123,6 @@ const commonCtrl = {
       res.status(200).json({ success: false, err });
     }
   },
-  getSponsors: async (req, res) => {
-    const { nation } = req.query;
-    res.sendFile(path.join(__dirname, "..", `public/${nation}/sponsors.html`));
-  },
 
   getLanding: async (req, res) => {
     const { nation } = req.query;
@@ -229,6 +218,97 @@ const commonCtrl = {
       description='${description}'
       WHERE id=1`;
       await connection.query(sql);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+
+  getSponsor: async (req, res) => {
+    const { nation } = req.query;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `SELECT * from sponsor`;
+      const row = await connection.query(sql);
+
+      let response = {};
+      response.success = true;
+      response.result = row[0];
+
+      res.status(200).json(response);
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+
+  addSponsor: async (req, res) => {
+    const { nation, name, url, imagePath } = req.body;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `INSERT INTO sponsor 
+      (name, url, image_path)
+      VALUES
+      ('${name}','${url}','${imagePath}')
+      `;
+      const row = await connection.query(sql);
+
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+  modifySponsor: async (req, res) => {
+    const { nation, id, name, url, imagePath } = req.body;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `UPDATE sponsor SET
+      name='${name}', url='${url}', image_path='${imagePath}'
+      WHERE id=${id}
+      `;
+      const row = await connection.query(sql);
+
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+  deleteSponsor: async (req, res) => {
+    const { nation, id } = req.query;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `DELETE FROM sponsor WHERE id=${id}`;
+      const row = await connection.query(sql);
+
       res.status(200).json({
         success: true,
       });

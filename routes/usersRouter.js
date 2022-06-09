@@ -25,12 +25,7 @@ const usersMid = require("../middlewares/users");
  *          description: successful operation
  */
 
-
-
-
-
 router.post("/login", usersCtrl.login);
-
 
 /**
  * @swagger
@@ -83,8 +78,6 @@ router.post("/logout", usersCtrl.logout);
  *          description: 다른 브라우저에서 로그인,
  */
 
-
-
 router.post(
   "/check",
   usersMid.checkToken,
@@ -97,12 +90,12 @@ router.post(
         email: res.locals.email,
         role: res.locals.role,
         accessToken: res.locals.accessToken,
+        isPasswordSet: res.locals.isPasswordSet,
       },
     };
     res.status(200).json(resObj);
   }
 );
-
 
 /**
  * @swagger
@@ -125,8 +118,6 @@ router.post(
  *        '200':
  *          description: successful operation
  */
-
-
 
 router.post("/checkemail", usersCtrl.checkEmail);
 
@@ -182,7 +173,12 @@ router.post("/passwordset", usersCtrl.setPassword);
  *        '200-P40':
  *          description: 현재 비밀번호 input이 DB와 다름,
  */
-router.post("/passwordreset", usersMid.checkToken, usersMid.readUser, usersCtrl.resetPassword);
+router.post(
+  "/passwordreset",
+  usersMid.checkToken,
+  usersMid.readUser,
+  usersCtrl.resetPassword
+);
 
 /**
  * @swagger
@@ -263,11 +259,10 @@ router.post("/passwordset/check", usersCtrl.checkPasswordSet);
  *      responses:
  *        '200':
  *          description: successful operation,
- *        
- *          
- *          
+ *
+ *
+ *
  */
 router.post("/register", usersCtrl.register);
-
 
 module.exports = router;

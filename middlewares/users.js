@@ -57,7 +57,8 @@ module.exports = {
     try {
       const sql = `SELECT 
       email,
-      role
+      role,
+      is_password_set
       FROM user 
       WHERE email="${accessToken.email}"
       AND refresh_token="${req.cookies.refreshToken}"`;
@@ -75,6 +76,7 @@ module.exports = {
       } else {
         res.locals.email = accessToken.email;
         res.locals.role = result[0][0].role;
+        res.locals.isPasswordSet = result[0][0].is_password_set === 1;
       }
       connection.release();
       next();
