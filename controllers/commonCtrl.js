@@ -255,14 +255,14 @@ const commonCtrl = {
   },
 
   addSponsor: async (req, res) => {
-    const { nation, name, url, imagePath } = req.body;
+    const { nation, name, url, imagePath, height } = req.body;
     const currentPool = getCurrentPool(nation);
     const connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `INSERT INTO sponsor 
-      (name, url, image_path)
+      (name, url, image_path, height)
       VALUES
-      ('${name}','${url}','${imagePath}')
+      ('${name}','${url}','${imagePath}', ${height ? height : 0})
       `;
       const row = await connection.query(sql);
 
@@ -279,12 +279,14 @@ const commonCtrl = {
     }
   },
   modifySponsor: async (req, res) => {
-    const { nation, id, name, url, imagePath } = req.body;
+    const { nation, id, name, url, imagePath, height } = req.body;
     const currentPool = getCurrentPool(nation);
     const connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE sponsor SET
-      name='${name}', url='${url}', image_path='${imagePath}'
+      name='${name}', url='${url}',
+      image_path='${imagePath}',
+      height=${height ? height : 0}
       WHERE id=${id}
       `;
       const row = await connection.query(sql);
