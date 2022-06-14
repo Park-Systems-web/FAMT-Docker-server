@@ -15,16 +15,29 @@ const zoomCtrl = {
   // 웨비나 목록 받아오기
   getWebinarList: async (req, res) => {
     try {
-      const response = await axios.get(
-        `https://api.zoom.us/v2/users/${zoomEmail}/webinars`,
+      let result = [];
+      let response = await axios.get(
+        `https://api.zoom.us/v2/users/${zoomEmail}/webinars?page_size=5`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
+      result.push(...response.data.webinars);
+      while (response.data.next_page_token !== "") {
+        response = await axios.get(
+          `https://api.zoom.us/v2/users/${zoomEmail}/webinars?page_size=5&next_page_token=${response.data.next_page_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        result.push(...response.data.webinars);
+      }
       res.status(200).json({
-        result: response.data,
+        result,
       });
     } catch (err) {
       console.log(err);
