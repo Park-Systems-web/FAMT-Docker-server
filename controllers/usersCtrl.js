@@ -270,6 +270,7 @@ const usersCtrl = {
   // 유럽 제외 회원가입
   register: async (req, res) => {
     const {
+      participateMethod,
       title,
       firstName,
       lastName,
@@ -278,7 +279,6 @@ const usersCtrl = {
       institute,
       department,
       country,
-      state,
       nation,
     } = req.body;
 
@@ -287,6 +287,7 @@ const usersCtrl = {
 
     try {
       const sql = `INSERT INTO user(
+        participate_method,
         title,
         first_name,
         last_name,
@@ -295,9 +296,9 @@ const usersCtrl = {
         phone,
         institute,
         department,
-        country,
-        state)
+        country)
       VALUES(
+        '${participateMethod}',
         '${title}',
         '${firstName}',
         '${lastName}',
@@ -306,8 +307,7 @@ const usersCtrl = {
         '${phone}',
         '${institute}',
         '${department}',
-        '${country}',
-        '${state}'
+        '${country}'
       )
       `;
 
@@ -327,6 +327,28 @@ const usersCtrl = {
         err,
         message: "Failed",
       });
+    }
+  },
+  unregister: async (req, res) => {
+    const { nation, id } = req.body;
+
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+
+    try {
+      const sql = `DELETE FROM user WHERE id=${id}`;
+      await connection.query(sql);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
     }
   },
 };

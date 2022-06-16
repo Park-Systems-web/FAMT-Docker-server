@@ -549,18 +549,14 @@ const adminCtrl = {
     const currentPool = getCurrentPool(nation);
     const connection = await currentPool.getConnection(async (conn) => conn);
     try {
-      let sql = "";
-      if (nation === "eu") {
-        // eu 일땐 점수메기는항목 5개 존재
-        sql = `SELECT id,email,title,role,last_name,first_name,institute,department,createdAt FROM user`;
-      } else {
-        sql = `SELECT * FROM user`;
-      }
+      const sql = `SELECT id,email,participate_method,title,role,last_name,first_name,institute,department,createdAt FROM user
+        ORDER BY createdAt DESC`;
       const result = await connection.query(sql);
       res.send(result[0]);
-      connection.release();
     } catch (err) {
       console.log(err);
+    } finally {
+      connection.release();
     }
   },
 
