@@ -195,7 +195,7 @@ const commonCtrl = {
       } else {
         res.status(200).json({
           success: true,
-          result: row[0][0],
+          result: row[0],
         });
       }
     } catch (err) {
@@ -217,6 +217,67 @@ const commonCtrl = {
       title='${title}',
       description='${description}'
       WHERE id=1`;
+      await connection.query(sql);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+  setLanding4Content: async (req, res) => {
+    const { nation, title, description } = req.body;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `INSERT INTO landing_section_4 (title,description) VALUES 
+      ('${title}','${description}')`;
+      await connection.query(sql);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+  modifyLanding4Content: async (req, res) => {
+    const { nation, id, title, description } = req.body;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `UPDATE landing_section_4 SET 
+      title='${title}',
+      description='${description}'
+      WHERE id=${id}`;
+      await connection.query(sql);
+      res.status(200).json({
+        success: true,
+      });
+    } catch (err) {
+      res.status(500).json({
+        success: false,
+        err,
+      });
+    } finally {
+      connection.release();
+    }
+  },
+  deleteLanding4Content: async (req, res) => {
+    const { nation, id } = req.query;
+    const currentPool = getCurrentPool(nation);
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `DELETE FROM landing_section_4 WHERE id=${id}`;
       await connection.query(sql);
       res.status(200).json({
         success: true,

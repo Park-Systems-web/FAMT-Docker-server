@@ -186,6 +186,11 @@ router.route("/banner").get(commonCtrl.getBanner).post(commonCtrl.setBanner);
 
 router.route("/landing/:id").get(commonCtrl.getLandingContent);
 router.route("/landing/2").post(commonCtrl.setLanding2Content);
+router
+  .route("/landing/4")
+  .post(commonCtrl.setLanding4Content)
+  .put(commonCtrl.modifyLanding4Content)
+  .delete(commonCtrl.deleteLanding4Content);
 
 router
   .route("/sponsor")
