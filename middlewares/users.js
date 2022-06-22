@@ -58,7 +58,8 @@ module.exports = {
       const sql = `SELECT 
       email,
       role,
-      is_password_set
+      is_password_set,
+      participate_method
       FROM user 
       WHERE email="${accessToken.email}"
       AND refresh_token="${req.cookies.refreshToken}"`;
@@ -77,6 +78,7 @@ module.exports = {
         res.locals.email = accessToken.email;
         res.locals.role = result[0][0].role;
         res.locals.isPasswordSet = result[0][0].is_password_set === 1;
+        res.locals.participate_method = result[0][0].participate_method;
       }
       connection.release();
       next();

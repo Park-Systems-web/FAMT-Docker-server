@@ -91,6 +91,7 @@ router.post(
         role: res.locals.role,
         accessToken: res.locals.accessToken,
         isPasswordSet: res.locals.isPasswordSet,
+        participate_method: res.locals.participate_method,
       },
     };
     res.status(200).json(resObj);

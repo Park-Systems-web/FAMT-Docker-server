@@ -61,7 +61,19 @@ router.get(
  *        '200':
  *          description: successful operation
  */
-
 router.route("/webinar/registrants/:webinarId").post(zoomCtrl.addRegistrant);
+
+/**
+ * @swagger
+ *  /api/zoom/webinar/registrants:
+ *    get:
+ *      tags:
+ *      - Zoom
+ *      description: webinar의 registrant 목록을 받아옵니다.
+ *      responses:
+ *        '200':
+ *          description: successful operation
+ */
+router.get("/webinar/registrants", zoomCtrl.getRegistrantList);
 
 module.exports = router;

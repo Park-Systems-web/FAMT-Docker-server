@@ -2,7 +2,7 @@ const axios = require("axios");
 const path = require("path");
 const jwt = require("jsonwebtoken");
 
-const zoomEmail = "event@nanoscientific.org";
+const zoomEmail = "atom@parksystems.com";
 
 const payload = {
   iss: process.env.ZOOM_API_KEY,
@@ -68,6 +68,8 @@ const zoomCtrl = {
       });
     }
   },
+
+  // 등록시키기
   addRegistrant: async (req, res) => {
     const { questions } = req.body;
     let newQuestions = {};
@@ -75,7 +77,6 @@ const zoomCtrl = {
     Object.entries(questions).forEach(
       (question) => (newQuestions[question[0]] = question[1].value)
     );
-    console.log(newQuestions);
 
     try {
       const response = await axios.post(
@@ -89,6 +90,56 @@ const zoomCtrl = {
       );
       res.status(200).json({
         result: response.data,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(400).json({
+        err,
+      });
+    }
+  },
+
+  // 등록자 리스트 받아오기.
+  getRegistrantList: async (req, res) => {
+    try {
+      let result = [];
+      const { webinarId } = req.query;
+      let response = await axios.get(
+        `https://api.zoom.us/v2/webinars/${webinarId}/registrants`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      result.push(
+        ...response.data.registrants.map((e) => {
+          return {
+            email: e.email,
+            join_url: e.join_url,
+          };
+        })
+      );
+      while (response.data.next_page_token !== "") {
+        response = await axios.get(
+          `https://api.zoom.us/v2/webinars/${webinarId}/registrants?next_page_token=${response.data.next_page_token}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        result.push(
+          ...response.data.registrants.map((e) => {
+            return {
+              email: e.email,
+              join_url: e.join_url,
+            };
+          })
+        );
+      }
+      res.status(200).json({
+        result,
       });
     } catch (err) {
       console.log(err);

@@ -10,17 +10,19 @@ const usersCtrl = {
 
     const userEmail = req.body.email;
     const userPw = req.body.password;
+    let participate_method = "";
 
     let checked = false;
 
     try {
-      const sql = `SELECT email, password, role FROM user WHERE email='${userEmail}'`;
+      const sql = `SELECT email, password, role, participate_method FROM user WHERE email='${userEmail}'`;
 
       const result = await connection.query(sql);
       if (result[0].length) {
         let dbPassword = result[0][0].password; // 해쉬화 된 db상의 wordpress 비밀번호
         checked = hasher.CheckPassword(userPw, dbPassword);
         role = result[0][0].role;
+        participate_method = result[0][0].participate_method;
       }
       connection.release();
     } catch (error) {
@@ -54,6 +56,7 @@ const usersCtrl = {
           message: "login success",
           accessToken,
           role,
+          participate_method,
         });
       } catch (error) {
         await connection.rollback();
