@@ -11,23 +11,17 @@ module.exports = {
       </div>
       <hr style="margin: 20px 0;width: 100%;border-top: 1px solid #f4f4f4;">
       <div class="comming-title" style="font-family: &quot;Open Sans&quot;, sans-serif;font-size: 20px;color: #16aee5;font-weight: 700;">
-        <span style="color: #003e7f">Nano<span><span style="color: #16aee5">Scientific</span> 2022
-      </span></span></div>
-  
+        <span style="color: #000">FAMT</span>
+        <span style="color: #F6A02F">2022</span>
+      </div>
       <div class="desc-wrap text-center" style="font-family: &quot;Open Sans&quot;, sans-serif;font-size: 12px;">
         <span class="desc desc-1">
-          NanoScientific plans are underway to continue the excitement that comes
-          from scientific innovation and discovery with a new line up for 2022!
-        </span>
-        <span class="desc desc-2">
-          Stay tuned for the 2022 NanoScientific Event Calendar for your chance to
-          network with leading experts who are pioneering the evolution of
-          scientific discovery at NanoScientific Conferences Worldwide.
+          This symposium gathers the professionals from the electronic industry to discuss innovative testing methods at nanoscale and tools for physical failure analysis of the future.
         </span>
       </div>
-      <a href="https://event.nanoscientific.org/" target="_blank" style="margin-top: 20px; font-size: 13px">https://event.nanoscientific.org/
+      <a href="https://famt.parksystems.com/" target="_blank" style="margin-top: 20px; font-size: 13px">https://famt.parksystems.com/
     </a></div>
   </body>
-  `
-  }
+  `;
+  },
 };

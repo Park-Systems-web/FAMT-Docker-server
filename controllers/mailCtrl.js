@@ -22,24 +22,44 @@ const mailCtrl = {
         const transporter = nodemailer.createTransport({
           debug: true,
           port: 587,
-          host: "smtp.ionos.com",
+          host: "smtp.office365.com",
           secure: false,
           requireTLS: true,
-          // tls: {
-          //   ciphers: "SSLv3",
-          // },
+          tls: {
+            ciphers: "SSLv3",
+          },
           auth: {
             user: process.env.SMTP_EMAIL,
             pass: process.env.SMTP_PASS,
           },
         });
+        // const transporter = nodemailer.createTransport({
+        //   debug: true,
+        //   port: 587,
+        //   host: "smtp.ionos.com",
+        //   secure: false,
+        //   requireTLS: true,
+        //   // tls: {
+        //   //   ciphers: "SSLv3",
+        //   // },
+        //   auth: {
+        //     user: process.env.SMTP_EMAIL,
+        //     pass: process.env.SMTP_PASS,
+        //   },
+        // });
 
         const info = await transporter.sendMail({
-          from: "2022 Nanoscientific Symposium <event@nanoscientific.org>",
+          from: "2022 Failure Analysis & Material Testing Symposium <no-reply@parksystems.com>",
           to: email,
           subject: `[${code}] Verification Code`,
           html: mailHTML.forgotPasswordHTML("Reset Your Password", code),
         });
+        // const info = await transporter.sendMail({
+        //   from: "2022 Failure Analysis & Material Testing <fam@nanoscientific.org>",
+        //   to: email,
+        //   subject: `[${code}] Verification Code`,
+        //   html: mailHTML.forgotPasswordHTML("Reset Your Password", code),
+        // });
 
         // info.accepted: [], info.rejected: [].
         // length를 통해 성공 실패 여부 판단 가능.
