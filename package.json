@@ -31,6 +31,8 @@
     "wordpress-hash-node": "^1.0.0"
   },
   "devDependencies": {
+    "crypto": "^1.0.1",
+    "jsrsasign": "^10.5.25",
     "nodemon": "^2.0.15",
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.3.0"

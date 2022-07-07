@@ -1,6 +1,9 @@
+require("dotenv").config();
 const axios = require("axios");
 const path = require("path");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
+const KJUR = require("jsrsasign");
 
 const zoomEmail = "atom@parksystems.com";
 
@@ -147,6 +150,36 @@ const zoomCtrl = {
         err,
       });
     }
+  },
+
+  getSignature: async (req, res) => {
+    const iat = Math.round(new Date().getTime() / 1000) - 30;
+    const exp = iat + 60 * 60 * 2;
+
+    const oHeader = { alg: "HS256", typ: "JWT" };
+
+    const oPayload = {
+      sdkKey: process.env.ZOOM_SDK_KEY,
+      mn: req.body.meetingNumber,
+      role: req.body.role,
+      iat: iat,
+      exp: exp,
+      appKey: process.env.ZOOM_SDK_KEY,
+      tokenExp: iat + 60 * 60 * 2,
+    };
+
+    const sHeader = JSON.stringify(oHeader);
+    const sPayload = JSON.stringify(oPayload);
+    const signature = KJUR.jws.JWS.sign(
+      "HS256",
+      sHeader,
+      sPayload,
+      process.env.ZOOM_SDK_SECRET
+    );
+
+    res.json({
+      signature: signature,
+    });
   },
 };
 

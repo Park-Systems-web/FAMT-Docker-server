@@ -76,4 +76,6 @@ router.route("/webinar/registrants/:webinarId").post(zoomCtrl.addRegistrant);
  */
 router.get("/webinar/registrants", zoomCtrl.getRegistrantList);
 
+router.post("/signature", zoomCtrl.getSignature);
+
 module.exports = router;

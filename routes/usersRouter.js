@@ -89,6 +89,7 @@ router.post(
       data: {
         email: res.locals.email,
         role: res.locals.role,
+        name: res.locals.name,
         accessToken: res.locals.accessToken,
         isPasswordSet: res.locals.isPasswordSet,
         participate_method: res.locals.participate_method,
