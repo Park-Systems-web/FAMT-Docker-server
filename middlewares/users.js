@@ -78,7 +78,7 @@ module.exports = {
         return;
       } else {
         res.locals.email = accessToken.email;
-        res.locals.name = `${accessToken.first_name} ${accessToken.last_name}`;
+        res.locals.name = `${result[0][0].first_name} ${result[0][0].last_name}`;
         res.locals.role = result[0][0].role;
         res.locals.isPasswordSet = result[0][0].is_password_set === 1;
         res.locals.participate_method = result[0][0].participate_method;

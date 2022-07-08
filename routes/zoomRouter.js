@@ -77,5 +77,10 @@ router.route("/webinar/registrants/:webinarId").post(zoomCtrl.addRegistrant);
 router.get("/webinar/registrants", zoomCtrl.getRegistrantList);
 
 router.post("/signature", zoomCtrl.getSignature);
+router.post("/webinar", zoomCtrl.addWebinar);
+router
+  .route("/webinar/:webinarId")
+  .get(zoomCtrl.getWebinar)
+  .delete(zoomCtrl.removeWebinar);
 
 module.exports = router;
