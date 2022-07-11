@@ -24,6 +24,6 @@ const router = require("express").Router();
  */
 
 router.route("/vcode/send").post(mailCtrl.sendVcode);
-
+router.route("/vcode/check").post(mailCtrl.checkVcode);
 
 module.exports = router;

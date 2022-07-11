@@ -17,7 +17,15 @@ const mailCtrl = {
       const row = await connection.query(sql);
       const emailExist = row[0][0].emailExist === 1 ? true : false;
 
-      const code = vCode.create();
+      const [code, token] = vCode.create(email);
+
+      const sql2 = `INSERT INTO email_verification (email, token)
+      VALUES ("${email}","${token}")
+      ON DUPLICATE KEY UPDATE
+      token="${token}"`;
+
+      const row2 = await connection.query(sql2);
+
       if (emailExist) {
         const transporter = nodemailer.createTransport({
           debug: true,
@@ -33,20 +41,6 @@ const mailCtrl = {
             pass: process.env.SMTP_PASS,
           },
         });
-        // const transporter = nodemailer.createTransport({
-        //   debug: true,
-        //   port: 587,
-        //   host: "smtp.ionos.com",
-        //   secure: false,
-        //   requireTLS: true,
-        //   // tls: {
-        //   //   ciphers: "SSLv3",
-        //   // },
-        //   auth: {
-        //     user: process.env.SMTP_EMAIL,
-        //     pass: process.env.SMTP_PASS,
-        //   },
-        // });
 
         const info = await transporter.sendMail({
           from: "2022 Failure Analysis & Material Testing Symposium <no-reply@parksystems.com>",
@@ -54,12 +48,6 @@ const mailCtrl = {
           subject: `[${code}] Verification Code`,
           html: mailHTML.forgotPasswordHTML("Reset Your Password", code),
         });
-        // const info = await transporter.sendMail({
-        //   from: "2022 Failure Analysis & Material Testing <fam@nanoscientific.org>",
-        //   to: email,
-        //   subject: `[${code}] Verification Code`,
-        //   html: mailHTML.forgotPasswordHTML("Reset Your Password", code),
-        // });
 
         // info.accepted: [], info.rejected: [].
         // length를 통해 성공 실패 여부 판단 가능.
@@ -92,6 +80,35 @@ const mailCtrl = {
       });
     } finally {
       connection.release();
+    }
+  },
+
+  checkVcode: async (req, res) => {
+    const { email, code, nation } = req.body;
+    const currentPool = getCurrentPool(nation);
+
+    const connection = await currentPool.getConnection(async (conn) => conn);
+    try {
+      const sql = `SELECT token from email_verification WHERE email="${email}"`;
+      const row = await connection.query(sql);
+
+      const { token } = row[0][0];
+      const isCorrect = vCode.check(code, token);
+      if (isCorrect) {
+        res.status(200).json({
+          success: true,
+        });
+      } else {
+        res.status(200).json({
+          success: false,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        msg: err,
+      });
     }
   },
 
