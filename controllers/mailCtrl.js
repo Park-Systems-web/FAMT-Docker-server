@@ -55,7 +55,6 @@ const mailCtrl = {
           res.status(200).json({
             success: true,
             result: true,
-            code,
             msg: "메일 전송 성공",
           });
         } else {
