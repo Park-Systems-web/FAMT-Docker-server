@@ -7,5 +7,6 @@ COPY package-lock.json ./
 COPY ./ ./
 
 RUN npm ci
+RUN npm install -g forever
 
-CMD ["npm","run","start"]
+CMD ["forever","index.js"]
