@@ -74,7 +74,7 @@ router.route("/webinar/registrants/:webinarId").post(zoomCtrl.addRegistrant);
  *        '200':
  *          description: successful operation
  */
-router.get("/webinar/registrants", zoomCtrl.getRegistrantList);
+router.get("/webinar/registrants/:webinarId", zoomCtrl.getRegistrantLink);
 
 router.post("/signature", zoomCtrl.getSignature);
 router.post("/webinar", zoomCtrl.addWebinar);

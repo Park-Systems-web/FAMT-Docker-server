@@ -217,11 +217,10 @@ const zoomCtrl = {
     }
   },
 
-  // 등록자 리스트 받아오기.
-  getRegistrantList: async (req, res) => {
+  getRegistrantLink: async (req, res) => {
     try {
-      let result = [];
-      const { webinarId } = req.query;
+      const { webinarId } = req.params;
+      const { email } = req.query;
       let response = await axios.get(
         `https://api.zoom.us/v2/webinars/${webinarId}/registrants`,
         {
@@ -230,14 +229,14 @@ const zoomCtrl = {
           },
         }
       );
-      result.push(
-        ...response.data.registrants.map((e) => {
-          return {
-            email: e.email,
-            join_url: e.join_url,
-          };
-        })
-      );
+      let filtered = response.data.registrants.filter((e) => e.email === email);
+      if (filtered.length > 0) {
+        result = filtered[0].join_url;
+        res.status(200).json({
+          result,
+        });
+        return;
+      }
       while (response.data.next_page_token !== "") {
         response = await axios.get(
           `https://api.zoom.us/v2/webinars/${webinarId}/registrants?next_page_token=${response.data.next_page_token}`,
@@ -247,17 +246,19 @@ const zoomCtrl = {
             },
           }
         );
-        result.push(
-          ...response.data.registrants.map((e) => {
-            return {
-              email: e.email,
-              join_url: e.join_url,
-            };
-          })
+        let filtered = response.data.registrants.filter(
+          (e) => e.email === email
         );
+        if (filtered.length > 0) {
+          result = filtered[0].join_url;
+          res.status(200).json({
+            result,
+          });
+          return;
+        }
       }
       res.status(200).json({
-        result,
+        result: null,
       });
     } catch (err) {
       console.log(err);
