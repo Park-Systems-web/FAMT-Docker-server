@@ -104,6 +104,7 @@ const commonCtrl = {
         ON S.id=SA.speaker_id WHERE S.id=${id}
       `;
       const result = await connection.query(sql);
+      connection.release();
       if (result[0].length === 0) {
         res.status(200).json({
           success: true,
@@ -117,9 +118,10 @@ const commonCtrl = {
           },
         });
       }
-      connection.release();
     } catch (err) {
       console.log(err);
+      connection.release();
+
       res.status(200).json({ success: false, err });
     }
   },
@@ -138,6 +140,7 @@ const commonCtrl = {
         path
       )}'`;
       const row = await connection.query(sql);
+      connection.release();
       if (row[0].length === 0) {
         res.status(200).json({
           success: false,
@@ -150,6 +153,7 @@ const commonCtrl = {
         });
       }
     } catch (err) {
+      connection.release();
       res.status(500).json({
         success: false,
         err,
@@ -167,6 +171,7 @@ const commonCtrl = {
         path
       )}'`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
@@ -187,6 +192,7 @@ const commonCtrl = {
     try {
       const sql = `SELECT * from landing_section_${id}`;
       const row = await connection.query(sql);
+      connection.release();
       if (row[0].length === 0) {
         res.status(200).json({
           success: false,
@@ -218,6 +224,7 @@ const commonCtrl = {
       description='${description}'
       WHERE id=1`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
@@ -238,6 +245,7 @@ const commonCtrl = {
       const sql = `INSERT INTO landing_section_4 (title,description) VALUES 
       ('${title}','${description}')`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
@@ -260,6 +268,7 @@ const commonCtrl = {
       description='${description}'
       WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
@@ -279,6 +288,7 @@ const commonCtrl = {
     try {
       const sql = `DELETE FROM landing_section_4 WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
@@ -299,6 +309,7 @@ const commonCtrl = {
     try {
       const sql = `SELECT * from sponsor`;
       const row = await connection.query(sql);
+      connection.release();
 
       let response = {};
       response.success = true;
@@ -326,6 +337,7 @@ const commonCtrl = {
       ('${name}','${url}','${imagePath}', ${height ? height : 0})
       `;
       const row = await connection.query(sql);
+      connection.release();
 
       res.status(200).json({
         success: true,
@@ -351,6 +363,7 @@ const commonCtrl = {
       WHERE id=${id}
       `;
       const row = await connection.query(sql);
+      connection.release();
 
       res.status(200).json({
         success: true,
@@ -371,6 +384,7 @@ const commonCtrl = {
     try {
       const sql = `DELETE FROM sponsor WHERE id=${id}`;
       const row = await connection.query(sql);
+      connection.release();
 
       res.status(200).json({
         success: true,

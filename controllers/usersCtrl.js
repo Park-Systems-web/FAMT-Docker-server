@@ -67,6 +67,7 @@ const usersCtrl = {
         throw error;
       }
     } else {
+      connection.release();
       res.status(200).json({
         success: false,
         message: "user info not match.",
@@ -128,11 +129,13 @@ const usersCtrl = {
       ) as result;`;
       const result = await connection.query(sql);
 
+      connection.release();
       res.status(200).json({
         success: true,
         result: result[0][0].result === 0 ? false : true,
       });
     } catch (err) {
+      connection.release();
       res.status(500).json({
         success: false,
         err,
@@ -152,11 +155,13 @@ const usersCtrl = {
       result = await connection.query(sql);
 
       if (result[0].length === 0) {
+        connection.release();
         res.status(200).json({
           success: false,
           result: "email NOT EXIST",
         });
       } else {
+        connection.release();
         res.status(200).json({
           success: true,
           result: result[0][0].is_password_set === 0 ? false : true,
@@ -164,6 +169,7 @@ const usersCtrl = {
         });
       }
     } catch (err) {
+      connection.release();
       res.status(500).json({
         success: false,
         err,
@@ -183,11 +189,13 @@ const usersCtrl = {
       const sql2 = `UPDATE user SET password='${userPassword}', is_password_set=1 WHERE email='${userEmail}'`;
       try {
         await connection.query(sql2);
+        connection.release();
         res.status(200).json({
           success: true,
           result: "success",
         });
       } catch (err) {
+        connection.release();
         res.status(500).json({
           success: false,
           err,
@@ -195,12 +203,11 @@ const usersCtrl = {
         return false;
       }
     } catch (err) {
+      connection.release();
       res.status(500).json({
         success: false,
         err,
       });
-    } finally {
-      connection.release();
     }
   },
 
@@ -220,11 +227,13 @@ const usersCtrl = {
       if (hasher.CheckPassword(curPassword, passwordRow[0][0].password)) {
         const sql2 = `UPDATE user SET password='${newPassword}', is_password_set=1 WHERE email='${userEmail}'`;
         await connection.query(sql2);
+        connection.release();
         res.status(200).json({
           success: true,
           result: "success",
         });
       } else {
+        connection.release();
         res.status(200).json({
           success: false,
           code: "P40",
@@ -233,13 +242,12 @@ const usersCtrl = {
       }
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(500).json({
         success: false,
         err,
       });
       return false;
-    } finally {
-      connection.release();
     }
   },
 
@@ -254,6 +262,7 @@ const usersCtrl = {
     try {
       const sql = `UPDATE user SET password='${newPassword}', is_password_set=1 WHERE email='${userEmail}'`;
       await connection.query(sql);
+      connection.release();
 
       res.status(200).json({
         success: true,
@@ -261,14 +270,13 @@ const usersCtrl = {
         msg: "비밀번호 변경 성공",
       });
     } catch (err) {
+      connection.release();
       console.log(err);
       res.status(500).json({
         success: false,
         err,
       });
       return false;
-    } finally {
-      connection.release();
     }
   },
 
@@ -317,16 +325,16 @@ const usersCtrl = {
       `;
 
       const result = await connection.query(sql);
+      await connection.commit();
+      connection.release();
 
       res.status(200).json({
         success: true,
         id: result[0].insertId,
         message: "Success",
       });
-
-      await connection.commit();
-      connection.release();
     } catch (err) {
+      connection.release();
       res.status(500).json({
         success: false,
         err,
@@ -343,17 +351,17 @@ const usersCtrl = {
     try {
       const sql = `DELETE FROM user WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(400).json({
         success: false,
         err,
       });
-    } finally {
-      connection.release();
     }
   },
 };

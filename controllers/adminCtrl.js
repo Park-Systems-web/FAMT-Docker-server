@@ -14,13 +14,16 @@ const adminCtrl = {
       )}')`;
 
       const result = await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
         message: "Success",
       });
-      connection.release();
     } catch (err) {
-      console.log(err);
+      connection.release();
+      res.status(400).json({
+        err,
+      });
     }
   },
   modifySession: async (req, res) => {
@@ -35,12 +38,16 @@ const adminCtrl = {
       )}', status=${status} WHERE id=${id}`;
 
       const result = await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
         message: "Success",
       });
-      connection.release();
     } catch (err) {
+      connection.release();
+      res.status(400).json({
+        err,
+      });
       console.log(err);
     }
   },
@@ -55,14 +62,17 @@ const adminCtrl = {
       // delete agendas
       let sql = `DELETE FROM program_agenda WHERE session_id=${id}`;
       const agendaResult = await connection.query(sql);
+      connection.release();
 
       // delete programs
       sql = `DELETE FROM programs WHERE session=${id}`;
       const programResult = await connection.query(sql);
+      connection.release();
 
       // delete session
       sql = `DELETE FROM program_sessions WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
 
       res.status(200).json({
         success: true,
@@ -70,6 +80,7 @@ const adminCtrl = {
       });
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(500).json({
         success: false,
         message: err,
@@ -99,16 +110,19 @@ const adminCtrl = {
 
       const sqlResult = await connection.query(sql);
       // console.log(sqlResult[0]);
+      connection.release();
 
       try {
         const adjustSql = `UPDATE programs SET next_id=${sqlResult[0].insertId} WHERE id!=${sqlResult[0].insertId} AND session=${session} AND next_id IS NULL`;
         const adjustSqlResult = await connection.query(adjustSql);
+        connection.release();
         // console.log(adjustSqlResult);
         res.status(200).json({
           success: true,
           message: "Success",
         });
       } catch (err) {
+        connection.release();
         res.status(200).json({
           success: false,
           message: "Failed",
@@ -116,8 +130,8 @@ const adminCtrl = {
         });
         console.log(err);
       }
-      connection.release();
     } catch (err) {
+      connection.release();
       res.status(200).json({
         success: false,
         message: "Failed",
@@ -158,6 +172,11 @@ const adminCtrl = {
       });
       connection.release();
     } catch (err) {
+      connection.release();
+      res.status(400).json({
+        success: false,
+        err,
+      });
       console.log(err);
     }
   },
@@ -176,18 +195,22 @@ const adminCtrl = {
 
       sql = `DELETE FROM programs WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
       // 딸려있는 agenda 삭제
       sql = `DELETE FROM program_agenda WHERE program_id=${id}`;
       await connection.query(sql);
+      connection.release();
 
       sql = `UPDATE programs SET next_id=${nextId} WHERE next_id=${id}`;
       await connection.query(sql);
+      connection.release();
 
       res.status(200).json({
         success: true,
         message: `id:${id} 프로그램 삭제`,
       });
     } catch (err) {
+      connection.release();
       res.status(200).json({
         success: false,
         message: err,
@@ -218,11 +241,13 @@ const adminCtrl = {
         AND program_id=${program_id} 
         AND next_id=99999`;
         const adjustSqlResult = await connection.query(adjustSql);
+        connection.release();
         res.status(200).json({
           success: true,
           message: "Success",
         });
       } catch (err) {
+        connection.release();
         res.status(200).json({
           success: false,
           message: "Failed",
@@ -230,8 +255,8 @@ const adminCtrl = {
         });
         console.log(err);
       }
-      connection.release();
     } catch (err) {
+      connection.release();
       res.status(200).json({
         success: false,
         message: "Failed",
@@ -249,12 +274,14 @@ const adminCtrl = {
       const sql = `UPDATE program_agenda SET session_id=${session_id},program_id=${program_id}, title='${title}',speakers='${speakers}' WHERE id=${id}`;
 
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
         message: "Success",
       });
       connection.release();
     } catch (err) {
+      connection.release();
       res.status(200).json({
         success: false,
         message: "Failed",
@@ -274,19 +301,23 @@ const adminCtrl = {
       let sql = `SELECT * FROM program_agenda WHERE id=${id}`;
 
       const selectResult = await connection.query(sql);
+      connection.release();
       const nextId = selectResult[0][0].next_id;
 
       sql = `DELETE FROM program_agenda WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
 
       sql = `UPDATE program_agenda SET next_id=${nextId} WHERE next_id=${id}`;
       await connection.query(sql);
+      connection.release();
 
       res.status(200).json({
         success: true,
         message: `id:${id} 프로그램 삭제`,
       });
     } catch (err) {
+      connection.release();
       res.status(200).json({
         success: false,
         message: err,
@@ -305,12 +336,14 @@ const adminCtrl = {
       for (const agenda of agendaList) {
         const sql = `UPDATE program_agenda SET next_id=${agenda.next_id} WHERE id=${agenda.id}`;
         await connection.query(sql);
+        connection.release();
       }
       res.status(200).json({
         success: true,
         agendaList,
       });
     } catch (err) {
+      connection.release();
       res.status(500).json({
         success: false,
         err,
@@ -329,8 +362,8 @@ const adminCtrl = {
     try {
       const sql = `SELECT * FROM programs WHERE status=0`;
       const result = await connection.query(sql);
-      res.send(result[0]);
       connection.release();
+      res.send(result[0]);
     } catch (err) {
       console.log(err);
     }
@@ -361,12 +394,12 @@ const adminCtrl = {
       programs.map(async (program) => {
         const sql = `UPDATE programs SET status=1 WHERE id=${program.id}`;
         await connection.query(sql);
+        connection.release();
       });
       res.status(200).json({
         success: true,
         message: "Success",
       });
-      connection.release();
     } catch (err) {
       console.log(err);
     }
@@ -413,16 +446,17 @@ const adminCtrl = {
       (name,belong,image_path,status,keynote,description,has_abstract)
       VALUES('${name}','${belong}','${imagePath}',1, ${keynote},'${description}', ${hasAbstract})`;
       const data = await connection.query(sql);
+      connection.release();
 
       const sql2 = `INSERT INTO speaker_abstract(speaker_id,belong,description)
           VALUES(${data[0].insertId},'${abstractBelong}','${abstractDesc}')`;
       await connection.query(sql2);
+      connection.release();
 
       res.status(200).json({
         success: true,
         message: "Success",
       });
-      connection.release();
     } catch (err) {
       console.log(err);
     }
@@ -455,6 +489,7 @@ const adminCtrl = {
       `;
 
       const data = await connection.query(sql);
+      connection.release();
 
       const sql2 = `INSERT INTO speaker_abstract (
         speaker_id,
@@ -471,12 +506,12 @@ const adminCtrl = {
         `;
 
       await connection.query(sql2);
+      connection.release();
 
       res.status(200).json({
         success: true,
         message: "Success",
       });
-      connection.release();
     } catch (err) {
       console.log(err);
     }
@@ -491,14 +526,17 @@ const adminCtrl = {
     try {
       const sql = `DELETE FROM speakers WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
       const sql2 = `DELETE FROM speaker_abstract WHERE speaker_id=${id}`;
       await connection.query(sql2);
+      connection.release();
 
       res.status(200).json({
         success: true,
         message: `연사 삭제 완료`,
       });
     } catch (err) {
+      connection.release();
       res.status(500).json({
         success: false,
         message: err,
@@ -516,13 +554,14 @@ const adminCtrl = {
       speakers.map(async (speaker) => {
         const sql = `UPDATE speakers SET status=1 WHERE id=${speaker.id}`;
         await connection.query(sql);
+        connection.release();
       });
       res.status(200).json({
         success: true,
         message: "Success",
       });
-      connection.release();
     } catch (err) {
+      connection.release();
       console.log(err);
     }
   },
@@ -536,9 +575,11 @@ const adminCtrl = {
     try {
       const sql = `SELECT * FROM speakers WHERE status=0`;
       const result = await connection.query(sql);
+      connection.release();
       res.send(result[0]);
       connection.release();
     } catch (err) {
+      connection.release();
       console.log(err);
     }
   },
@@ -552,8 +593,10 @@ const adminCtrl = {
       const sql = `SELECT id,email,participate_method,title,role,last_name,first_name,institute,department,createdAt FROM user
         ORDER BY createdAt DESC`;
       const result = await connection.query(sql);
+      connection.release();
       res.send(result[0]);
     } catch (err) {
+      connection.release();
       console.log(err);
     } finally {
       connection.release();
@@ -568,12 +611,14 @@ const adminCtrl = {
     try {
       const sql = `UPDATE user SET role='${role}' WHERE id=${id}`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
         msg: "변경 성공",
       });
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(500).json({
         success: false,
         err,

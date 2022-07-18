@@ -15,6 +15,7 @@ const mailCtrl = {
       as emailExist`;
 
       const row = await connection.query(sql);
+      connection.release();
       const emailExist = row[0][0].emailExist === 1 ? true : false;
 
       const [code, token] = vCode.create(email);
@@ -25,6 +26,7 @@ const mailCtrl = {
       token="${token}"`;
 
       const row2 = await connection.query(sql2);
+      connection.release();
 
       if (emailExist) {
         const transporter = nodemailer.createTransport({
@@ -73,6 +75,7 @@ const mailCtrl = {
       }
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(500).json({
         success: false,
         err,
@@ -90,6 +93,7 @@ const mailCtrl = {
     try {
       const sql = `SELECT token from email_verification WHERE email="${email}"`;
       const row = await connection.query(sql);
+      connection.release();
 
       const { token } = row[0][0];
       const isCorrect = vCode.check(code, token);
@@ -103,6 +107,7 @@ const mailCtrl = {
         });
       }
     } catch (err) {
+      connection.release();
       console.log(err);
       res.status(500).json({
         success: false,
@@ -120,6 +125,7 @@ const mailCtrl = {
       const sql = `SELECT is_published FROM menu WHERE path='${path}'`;
 
       const row = await connection.query(sql);
+      connection.release();
 
       if (row[0].length !== 0) {
         res.status(200).json({
@@ -135,6 +141,7 @@ const mailCtrl = {
       }
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(500).json({
         success: false,
         msg: err,

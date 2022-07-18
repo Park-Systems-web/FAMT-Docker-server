@@ -244,6 +244,7 @@ const zoomCtrl = {
       `;
 
       const row = await connection.query(sql);
+      connection.release();
       if (row[0].length !== 0) {
         let response = await axios.get(
           `https://api.zoom.us/v2/webinars/${webinarId}/registrants/${row[0][0].registrant_id}`,
@@ -253,8 +254,6 @@ const zoomCtrl = {
             },
           }
         );
-        connection.release();
-
         res.status(200).json({
           result: response.data.join_url,
           success: true,
