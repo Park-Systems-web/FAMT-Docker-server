@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const usersCtrl = require("../controllers/usersCtrl");
+const zoomCtrl = require("../controllers/zoomCtrl");
 const usersMid = require("../middlewares/users");
 
 /**
