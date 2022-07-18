@@ -95,17 +95,20 @@ const zoomCtrl = {
           type,
         });
       }
+      connection.release();
+
       res.status(200).json({
         result,
         success: true,
       });
     } catch (err) {
       console.log(err);
+      connection.release();
+
       res.status(400).json({
         err,
       });
     }
-    connection.release();
   },
 
   getWebinar: async (req, res) => {
@@ -164,7 +167,6 @@ const zoomCtrl = {
         success: false,
       });
     }
-    connection.release();
   },
 
   // 웨비나 등록 질문 받아오기.
@@ -214,15 +216,18 @@ const zoomCtrl = {
       `;
 
       await connection.query(sql);
-
+      connection.release();
       res.status(200).json({
         result: response.data,
       });
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(400).json({
         err,
       });
+    } finally {
+      connection.release();
     }
   },
 
@@ -239,7 +244,6 @@ const zoomCtrl = {
       `;
 
       const row = await connection.query(sql);
-
       if (row[0].length !== 0) {
         let response = await axios.get(
           `https://api.zoom.us/v2/webinars/${webinarId}/registrants/${row[0][0].registrant_id}`,
@@ -249,20 +253,21 @@ const zoomCtrl = {
             },
           }
         );
+        connection.release();
+
         res.status(200).json({
           result: response.data.join_url,
           success: true,
         });
       } else {
+        connection.release();
         res.status(200).json({
           result: null,
           success: true,
         });
       }
     } catch (err) {
-      if (err.response.data.code == 3079) {
-        console.log("hi");
-      }
+      connection.release();
       res.status(400).json({
         success: false,
       });
@@ -288,6 +293,7 @@ const zoomCtrl = {
 
         const row = await connection.query(sql1);
 
+        connection.release();
         if (row[0].length !== 0) {
           success.push(webinarId);
           connection.release();
@@ -339,11 +345,13 @@ const zoomCtrl = {
           }
         }
       }
+      connection.release();
       res.status(200).json({
         success,
       });
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(400).json({
         err,
       });
@@ -387,16 +395,17 @@ const zoomCtrl = {
     try {
       const sql = `INSERT INTO webinar (webinar_id) VALUES ("${webinarId}")`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(400).json({
         err,
       });
     }
-    connection.release();
   },
   removeWebinar: async (req, res) => {
     const { nation, webinarId } = req.params;
@@ -405,11 +414,13 @@ const zoomCtrl = {
     try {
       const sql = `DELETE FROM webinar WHERE webinar_id="${webinarId}"`;
       await connection.query(sql);
+      connection.release();
       res.status(200).json({
         success: true,
       });
     } catch (err) {
       console.log(err);
+      connection.release();
       res.status(400).json({
         err,
       });
