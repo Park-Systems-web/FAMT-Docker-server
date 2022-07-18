@@ -9,4 +9,4 @@ COPY ./ ./
 RUN npm ci
 RUN npm install -g forever
 
-CMD ["forever","-m=100","--minUpTime=1000","--spinSleepTime=1000","start","index.js"]
+CMD ["forever","index.js"]
