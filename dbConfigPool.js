@@ -7,6 +7,8 @@ const famtPool = mysql.createPool({
   port: "3307",
   database: "famt",
   connectionLimit: 30,
+  waitForConnections: true,
+  queueLimit: 0,
   enableKeepAlive: true,
 });
 

@@ -6,6 +6,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const cookies = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
+// const { getCurrentPool } = require("./utils/getCurrentPool");
 
 var whitelist = [
   "http://localhost:8080",
@@ -50,6 +51,18 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
   console.log("Server is running on port", PORT);
 });
+
+// // 서버에 5초마다 쿼리 보내기
+// const ping = async () => {
+//   const pool = await getCurrentPool("us");
+//   const db = await pool.getConnection(async (conn) => conn);
+
+//   setInterval(function () {
+//     db.query("SELECT 1");
+//     db.release();
+//   }, 5000);
+// };
+// ping();
 
 server.keepAliveTimeout = 65000;
 server.headersTimeout = 66000;
