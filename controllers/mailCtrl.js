@@ -95,7 +95,7 @@ const mailCtrl = {
     const { email, code, nation } = req.body;
     const currentPool = getCurrentPool(nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT token from email_verification WHERE email="${email}"`;
       connection = await checkConnectionState(connection, currentPool);
@@ -127,7 +127,7 @@ const mailCtrl = {
     const { path, nation } = req.body;
     const currentPool = getCurrentPool(nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT is_published FROM menu WHERE path='${path}'`;
 
