@@ -1,11 +1,12 @@
 const path = require("path");
 const { getCurrentPool } = require("../utils/getCurrentPool");
+const { checkConnectionState } = require("../utils/checkConnectionState");
 
 const adminCtrl = {
   addSession: async (req, res) => {
     const { nation, title, date } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `INSERT INTO program_sessions(session_title,date) VALUES('${title}','${date.substr(
@@ -13,6 +14,7 @@ const adminCtrl = {
         10
       )}')`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -29,7 +31,7 @@ const adminCtrl = {
   modifySession: async (req, res) => {
     const { nation, title, date, id, status } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `UPDATE program_sessions SET session_title='${title}',date='${date.substr(
@@ -37,6 +39,7 @@ const adminCtrl = {
         10
       )}', status=${status} WHERE id=${id}`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -56,11 +59,12 @@ const adminCtrl = {
     const nation = req.query.nation;
     const id = req.params.id;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       // delete agendas
       let sql = `DELETE FROM program_agenda WHERE session_id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
       const agendaResult = await connection.query(sql);
       connection.release();
 
@@ -103,11 +107,12 @@ const adminCtrl = {
     } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `INSERT INTO programs(session,start_time,end_time,title,speakers,description, emphasize) VALUES(${session},'${startTime}','${endTime}','${title}','${speakers}','${description}', ${emphasize})`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const sqlResult = await connection.query(sql);
       // console.log(sqlResult[0]);
       connection.release();
@@ -154,7 +159,7 @@ const adminCtrl = {
     } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE programs SET 
       session=${session}, 
@@ -165,6 +170,7 @@ const adminCtrl = {
       end_time='${endTime}',
       emphasize=${emphasize} WHERE id=${id}`;
 
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       res.status(200).json({
         success: true,
@@ -185,10 +191,11 @@ const adminCtrl = {
     const nation = req.query.nation;
     const id = req.params.id;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       let sql = `SELECT * FROM programs WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
 
       const selectResult = await connection.query(sql);
       const nextId = selectResult[0][0].next_id;
@@ -225,12 +232,13 @@ const adminCtrl = {
     const { nation, program_id, title, speakers, session_id } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `INSERT INTO program_agenda(session_id,program_id,title,speakers) 
       VALUES(${session_id},${program_id},'${title}','${speakers}')`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const sqlResult = await connection.query(sql);
 
       try {
@@ -269,9 +277,10 @@ const adminCtrl = {
     const { nation, title, id, program_id, speakers, session_id } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE program_agenda SET session_id=${session_id},program_id=${program_id}, title='${title}',speakers='${speakers}' WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
 
       await connection.query(sql);
       connection.release();
@@ -295,11 +304,12 @@ const adminCtrl = {
     const nation = req.query.nation;
     const id = req.params.id;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       let sql = `SELECT * FROM program_agenda WHERE id=${id}`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const selectResult = await connection.query(sql);
       connection.release();
       const nextId = selectResult[0][0].next_id;
@@ -330,11 +340,12 @@ const adminCtrl = {
   reorderAgenda: async (req, res) => {
     const { agendaList, nation } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       for (const agenda of agendaList) {
         const sql = `UPDATE program_agenda SET next_id=${agenda.next_id} WHERE id=${agenda.id}`;
+        connection = await checkConnectionState(connection, currentPool);
         await connection.query(sql);
         connection.release();
       }
@@ -357,10 +368,11 @@ const adminCtrl = {
     const { nation } = req.query;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `SELECT * FROM programs WHERE status=0`;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       connection.release();
       res.send(result[0]);
@@ -373,10 +385,11 @@ const adminCtrl = {
     const { nation } = req.query;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `SELECT * FROM program_sessions WHERE status=0`;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       res.send(result[0]);
       connection.release();
@@ -388,11 +401,12 @@ const adminCtrl = {
   showProgram: async (req, res) => {
     const { nation, programs } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       programs.map(async (program) => {
         const sql = `UPDATE programs SET status=1 WHERE id=${program.id}`;
+        connection = await checkConnectionState(connection, currentPool);
         await connection.query(sql);
         connection.release();
       });
@@ -408,11 +422,12 @@ const adminCtrl = {
   showSession: async (req, res) => {
     const { nation, sessions } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       sessions.map(async (session) => {
         const sql = `UPDATE program_sessions SET status=1 WHERE id=${session.id}`;
+        connection = await checkConnectionState(connection, currentPool);
         await connection.query(sql);
       });
       res.status(200).json({
@@ -439,12 +454,13 @@ const adminCtrl = {
     } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `INSERT INTO speakers
       (name,belong,image_path,status,keynote,description,has_abstract)
       VALUES('${name}','${belong}','${imagePath}',1, ${keynote},'${description}', ${hasAbstract})`;
+      connection = await checkConnectionState(connection, currentPool);
       const data = await connection.query(sql);
       connection.release();
 
@@ -476,7 +492,7 @@ const adminCtrl = {
     } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE speakers SET 
       name='${name}',
@@ -488,6 +504,7 @@ const adminCtrl = {
       WHERE id=${id}
       `;
 
+      connection = await checkConnectionState(connection, currentPool);
       const data = await connection.query(sql);
       connection.release();
 
@@ -521,10 +538,11 @@ const adminCtrl = {
     const nation = req.query.nation;
     const id = req.params.id;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `DELETE FROM speakers WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       const sql2 = `DELETE FROM speaker_abstract WHERE speaker_id=${id}`;
@@ -549,10 +567,11 @@ const adminCtrl = {
   showSpeaker: async (req, res) => {
     const { nation, speakers } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       speakers.map(async (speaker) => {
         const sql = `UPDATE speakers SET status=1 WHERE id=${speaker.id}`;
+        connection = await checkConnectionState(connection, currentPool);
         await connection.query(sql);
         connection.release();
       });
@@ -570,10 +589,11 @@ const adminCtrl = {
     const { nation } = req.query;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `SELECT * FROM speakers WHERE status=0`;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       connection.release();
       res.send(result[0]);
@@ -588,10 +608,11 @@ const adminCtrl = {
     const { nation } = req.query;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT id,email,participate_method,title,role,last_name,first_name,institute,department,createdAt FROM user
         ORDER BY createdAt DESC`;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       connection.release();
       res.send(result[0]);
@@ -607,9 +628,10 @@ const adminCtrl = {
     const { nation, id, role } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE user SET role='${role}' WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({

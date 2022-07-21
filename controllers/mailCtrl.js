@@ -2,17 +2,21 @@ const { getCurrentPool } = require("../utils/getCurrentPool");
 const nodemailer = require("nodemailer");
 const vCode = require("../utils/verificationCode");
 const mailHTML = require("../utils/mailTemplates");
+const { checkConnectionState } = require("../utils/checkConnectionState");
 
 const mailCtrl = {
   sendVcode: async (req, res) => {
     const { email, nation } = req.body;
     const currentPool = getCurrentPool(nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
+
     try {
       const sql = `SELECT EXISTS
       (SELECT email FROM user WHERE email="${email}")
       as emailExist`;
+
+      connection = await checkConnectionState(connection, currentPool);
 
       const row = await connection.query(sql);
       connection.release();
@@ -24,6 +28,8 @@ const mailCtrl = {
       VALUES ("${email}","${token}")
       ON DUPLICATE KEY UPDATE
       token="${token}"`;
+
+      connection = await checkConnectionState(connection, currentPool);
 
       const row2 = await connection.query(sql2);
       connection.release();
@@ -92,6 +98,7 @@ const mailCtrl = {
     const connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT token from email_verification WHERE email="${email}"`;
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
 
@@ -124,6 +131,7 @@ const mailCtrl = {
     try {
       const sql = `SELECT is_published FROM menu WHERE path='${path}'`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
 

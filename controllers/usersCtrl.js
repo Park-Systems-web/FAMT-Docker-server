@@ -1,12 +1,13 @@
 const hasher = require("wordpress-hash-node");
 const { issueAccessToken, issueRefreshToken } = require("../utils/jwt");
 const { getCurrentPool } = require("../utils/getCurrentPool");
+const { checkConnectionState } = require("../utils/checkConnectionState");
 
 const usersCtrl = {
   login: async (req, res, next) => {
     const currentPool = getCurrentPool(req.body.nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const userEmail = req.body.email;
     const userPw = req.body.password;
@@ -16,6 +17,7 @@ const usersCtrl = {
 
     try {
       const sql = `SELECT email, password, first_name, last_name, role, participate_method FROM user WHERE email='${userEmail}'`;
+      connection = await checkConnectionState(connection, currentPool);
 
       const result = await connection.query(sql);
       if (result[0].length) {
@@ -38,6 +40,7 @@ const usersCtrl = {
       let refreshToken = issueRefreshToken(userEmail);
       const insertSql = `UPDATE user SET refresh_token='${refreshToken}' WHERE email='${userEmail}'`;
       try {
+        connection = await checkConnectionState(connection, currentPool);
         await connection.beginTransaction();
         await connection.query(insertSql);
 
@@ -78,7 +81,7 @@ const usersCtrl = {
   logout: async (req, res) => {
     const currentPool = getCurrentPool(req.body.nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const userEmail = req.body.email;
     const refreshToken = req.cookies.refreshToken;
@@ -94,6 +97,7 @@ const usersCtrl = {
       const sql = `UPDATE user SET refresh_token='' 
       WHERE email='${userEmail}' AND refresh_token='${refreshToken}'`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       // if (result[0].changedRows === 0) {
       //   res.status(200).json({
@@ -119,7 +123,7 @@ const usersCtrl = {
   },
   checkEmail: async (req, res) => {
     const currentPool = getCurrentPool(req.body.nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const userEmail = req.body.email;
 
@@ -127,6 +131,7 @@ const usersCtrl = {
       const sql = `SELECT EXISTS( 
         SELECT email FROM user WHERE email="${userEmail}"
       ) as result;`;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
 
       connection.release();
@@ -145,13 +150,14 @@ const usersCtrl = {
 
   checkPasswordSet: async (req, res) => {
     const currentPool = getCurrentPool(req.body.nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const userEmail = req.body.email;
 
     let result = "";
     try {
       const sql = `SELECT is_password_set FROM user WHERE email="${userEmail}"`;
+      connection = await checkConnectionState(connection, currentPool);
       result = await connection.query(sql);
 
       if (result[0].length === 0) {
@@ -180,7 +186,7 @@ const usersCtrl = {
   // 비밀번호 초기 설정
   setPassword: async (req, res) => {
     const currentPool = getCurrentPool(req.body.nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const userEmail = req.body.email;
     const userPassword = hasher.HashPassword(req.body.password);
@@ -188,6 +194,7 @@ const usersCtrl = {
     try {
       const sql2 = `UPDATE user SET password='${userPassword}', is_password_set=1 WHERE email='${userEmail}'`;
       try {
+        connection = await checkConnectionState(connection, currentPool);
         await connection.query(sql2);
         connection.release();
         res.status(200).json({
@@ -214,7 +221,7 @@ const usersCtrl = {
   // 비밀번호 재설정
   resetPassword: async (req, res) => {
     const currentPool = getCurrentPool(req.body.nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const userEmail = res.locals.email;
     const curPassword = req.body.curPassword;
@@ -222,6 +229,7 @@ const usersCtrl = {
 
     try {
       const sql1 = `SELECT password FROM user WHERE email='${userEmail}'`;
+      connection = await checkConnectionState(connection, currentPool);
       const passwordRow = await connection.query(sql1);
 
       if (hasher.CheckPassword(curPassword, passwordRow[0][0].password)) {
@@ -254,13 +262,14 @@ const usersCtrl = {
   // 비밀번호 분실
   forgotPassword: async (req, res) => {
     const currentPool = getCurrentPool(req.body.nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const userEmail = req.body.email;
     const newPassword = hasher.HashPassword(req.body.password);
 
     try {
       const sql = `UPDATE user SET password='${newPassword}', is_password_set=1 WHERE email='${userEmail}'`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
 
@@ -296,7 +305,7 @@ const usersCtrl = {
     } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `INSERT INTO user(
@@ -324,6 +333,7 @@ const usersCtrl = {
       )
       `;
 
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       await connection.commit();
       connection.release();
@@ -346,10 +356,11 @@ const usersCtrl = {
     const { nation, id } = req.body;
 
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `DELETE FROM user WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({

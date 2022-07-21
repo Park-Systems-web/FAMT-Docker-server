@@ -1,14 +1,16 @@
 const { getCurrentPool } = require("../utils/getCurrentPool");
+const { checkConnectionState } = require("../utils/checkConnectionState");
 
 const menuCtrl = {
   getMenuList: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT * FROM menu`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
 
       if (row[0].length !== 0) {
@@ -37,11 +39,12 @@ const menuCtrl = {
     const { nation, menus } = req.body;
     const currentPool = getCurrentPool(nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       for (const menu of menus) {
         if (menu.isChanged) {
           const sql = `UPDATE menu SET is_published=${menu.is_published} WHERE id=${menu.id}`;
+          connection = await checkConnectionState(connection, currentPool);
           const row = await connection.query(sql);
         }
       }
@@ -63,10 +66,11 @@ const menuCtrl = {
     const { path, nation } = req.body;
     const currentPool = getCurrentPool(nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT is_published FROM menu WHERE path='${path}'`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
 
       if (row[0].length !== 0) {
@@ -95,10 +99,11 @@ const menuCtrl = {
     const { path, nation, isPublished } = req.body;
     const currentPool = getCurrentPool(nation);
 
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE menu SET is_published=${isPublished} WHERE path='${path}'`;
 
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
 
       res.status(200).json({

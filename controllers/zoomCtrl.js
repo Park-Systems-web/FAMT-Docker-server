@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const KJUR = require("jsrsasign");
 const { getCurrentPool } = require("../utils/getCurrentPool");
+const { checkConnectionState } = require("../utils/checkConnectionState");
 
 const zoomEmail = "atom@parksystems.com";
 
@@ -53,9 +54,10 @@ const zoomCtrl = {
   getWebinarList: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT webinar_id FROM webinar`;
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
 
       const webinarIdList = row[0].map((e) => e.webinar_id);
@@ -115,7 +117,7 @@ const zoomCtrl = {
     const { nation } = req.query;
     const { webinarId } = req.params;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       let response = await axios.get(
         `https://api.zoom.us/v2/webinars/${webinarId}`,
@@ -195,7 +197,7 @@ const zoomCtrl = {
   addRegistrant: async (req, res) => {
     const { questions, nation } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     let newQuestions = {};
     Object.entries(questions).forEach(
       (question) => (newQuestions[question[0]] = question[1].value)
@@ -215,6 +217,7 @@ const zoomCtrl = {
       ("${response.data.registrant_id}","${newQuestions.email}","${req.params.webinarId}")
       `;
 
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -235,7 +238,7 @@ const zoomCtrl = {
     const { webinarId } = req.params;
     const { email, nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `
@@ -243,6 +246,7 @@ const zoomCtrl = {
       WHERE email="${email}" AND webinar_id="${webinarId}";
       `;
 
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
       if (row[0].length !== 0) {
@@ -276,12 +280,13 @@ const zoomCtrl = {
     const { webinarId } = req.params;
     const { email, nation } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     const success = [];
 
     try {
       const sql0 = `SELECT webinar_id FROM webinar`;
+      connection = await checkConnectionState(connection, currentPool);
       const row0 = await connection.query(sql0);
 
       for (let i = 0; i < row0[0].length; i++) {
@@ -390,9 +395,10 @@ const zoomCtrl = {
     const { nation } = req.query;
     const { webinarId } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `INSERT INTO webinar (webinar_id) VALUES ("${webinarId}")`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -409,9 +415,10 @@ const zoomCtrl = {
   removeWebinar: async (req, res) => {
     const { nation, webinarId } = req.params;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `DELETE FROM webinar WHERE webinar_id="${webinarId}"`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({

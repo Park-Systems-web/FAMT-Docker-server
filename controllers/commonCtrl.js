@@ -1,6 +1,7 @@
 const { default: axios } = require("axios");
 const path = require("path");
 const { getCurrentPool } = require("../utils/getCurrentPool");
+const { checkConnectionState } = require("../utils/checkConnectionState");
 
 const commonCtrl = {
   getExhibitParkSystems: async (req, res) => {
@@ -17,9 +18,10 @@ const commonCtrl = {
   getPrograms: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT * FROM programs WHERE status=1 ORDER BY start_time `;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       res.send(result[0]);
       connection.release();
@@ -30,9 +32,10 @@ const commonCtrl = {
   getAgenda: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT * FROM program_agenda ORDER BY program_id,next_id`;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       res.status(200).json({ success: 1, data: result[0] });
       connection.release();
@@ -45,9 +48,10 @@ const commonCtrl = {
   getSessions: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT * FROM program_sessions WHERE status=1 ORDER BY date `;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       res.send(result[0]);
       connection.release();
@@ -58,13 +62,14 @@ const commonCtrl = {
   getSpeakers: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `
       SELECT 
       *
       FROM speakers as S
       `;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       res.send(result[0]);
       connection.release();
@@ -75,9 +80,10 @@ const commonCtrl = {
   getKeynoteSpeakers: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT * FROM speakers WHERE keynote=1`;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       res.send(result[0]);
       connection.release();
@@ -88,7 +94,7 @@ const commonCtrl = {
   getSpeakerDetailById: async (req, res) => {
     const { nation, id } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `
@@ -103,6 +109,7 @@ const commonCtrl = {
       INNER JOIN speaker_abstract as SA 
         ON S.id=SA.speaker_id WHERE S.id=${id}
       `;
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
       connection.release();
       if (result[0].length === 0) {
@@ -134,8 +141,9 @@ const commonCtrl = {
   getBanner: async (req, res) => {
     const { nation, path } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
+      connection = await checkConnectionState(connection, currentPool);
       const sql = `SELECT banner_path from banner WHERE path='${decodeURIComponent(
         path
       )}'`;
@@ -165,11 +173,12 @@ const commonCtrl = {
   setBanner: async (req, res) => {
     const { nation, path, imagePath } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE banner SET banner_path='${imagePath}' WHERE path='${decodeURIComponent(
         path
       )}'`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -188,9 +197,11 @@ const commonCtrl = {
     const { nation } = req.query;
     const { id } = req.params;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT * from landing_section_${id}`;
+
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
       if (row[0].length === 0) {
@@ -217,12 +228,13 @@ const commonCtrl = {
   setLanding2Content: async (req, res) => {
     const { nation, title, description } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE landing_section_2 SET 
       title='${title}',
       description='${description}'
       WHERE id=1`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -240,10 +252,11 @@ const commonCtrl = {
   setLanding4Content: async (req, res) => {
     const { nation, title, description } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `INSERT INTO landing_section_4 (title,description) VALUES 
       ('${title}','${description}')`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -261,12 +274,13 @@ const commonCtrl = {
   modifyLanding4Content: async (req, res) => {
     const { nation, id, title, description } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE landing_section_4 SET 
       title='${title}',
       description='${description}'
       WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -284,9 +298,10 @@ const commonCtrl = {
   deleteLanding4Content: async (req, res) => {
     const { nation, id } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `DELETE FROM landing_section_4 WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
       await connection.query(sql);
       connection.release();
       res.status(200).json({
@@ -305,9 +320,10 @@ const commonCtrl = {
   getSponsor: async (req, res) => {
     const { nation } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `SELECT * from sponsor`;
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
 
@@ -329,13 +345,14 @@ const commonCtrl = {
   addSponsor: async (req, res) => {
     const { nation, name, url, imagePath, height } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `INSERT INTO sponsor 
       (name, url, image_path, height)
       VALUES
       ('${name}','${url}','${imagePath}', ${height ? height : 0})
       `;
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
 
@@ -354,7 +371,7 @@ const commonCtrl = {
   modifySponsor: async (req, res) => {
     const { nation, id, name, url, imagePath, height } = req.body;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `UPDATE sponsor SET
       name='${name}', url='${url}',
@@ -362,6 +379,7 @@ const commonCtrl = {
       height=${height ? height : 0}
       WHERE id=${id}
       `;
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
 
@@ -380,9 +398,10 @@ const commonCtrl = {
   deleteSponsor: async (req, res) => {
     const { nation, id } = req.query;
     const currentPool = getCurrentPool(nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
     try {
       const sql = `DELETE FROM sponsor WHERE id=${id}`;
+      connection = await checkConnectionState(connection, currentPool);
       const row = await connection.query(sql);
       connection.release();
 

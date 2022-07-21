@@ -5,6 +5,7 @@ const {
   issueRefreshToken,
   compareRefreshToken,
 } = require("../utils/jwt");
+const { checkConnectionState } = require("../utils/checkConnectionState");
 
 module.exports = {
   checkToken: async (req, res, next) => {
@@ -52,7 +53,7 @@ module.exports = {
   readUser: async (req, res, next) => {
     const accessToken = verifyToken(res.locals.accessToken);
     const currentPool = getCurrentPool(req.body.nation);
-    const connection = await currentPool.getConnection(async (conn) => conn);
+    let connection = await currentPool.getConnection(async (conn) => conn);
 
     try {
       const sql = `SELECT 
@@ -66,6 +67,7 @@ module.exports = {
       WHERE email="${accessToken.email}"
       AND refresh_token="${req.cookies.refreshToken}"`;
 
+      connection = await checkConnectionState(connection, currentPool);
       const result = await connection.query(sql);
 
       if (result[0].length === 0) {
